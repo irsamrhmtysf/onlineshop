@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Irsam Fruit Store & CMS Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans min-h-screen">
+
+    <!-- TOP ANNOUNCEMENT BAR -->
+    <div id="announcement-bar" class="bg-green-600 text-white text-center py-2 text-sm font-semibold shadow-md">
+        🍏 Gratis Ongkir untuk pembelian minimal Rp 150.000! 🍊
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 flex justify-between items-center h-16">
+            <div class="flex items-center space-x-2 cursor-pointer" onclick="switchView('storefront')">
+                <span class="text-2xl">🍏</span>
+                <span class="font-bold text-xl text-gray-800" id="nav-store-name">Irsam Fruit Store</span>
+            </div>
+            <div class="flex space-x-4 text-sm font-medium">
+                <button onclick="switchView('storefront')" class="text-green-600 hover:text-green-700">🛒 Katalog Toko</button>
+                <button onclick="switchView('cms')" class="text-gray-600 hover:text-green-600">⚙️ Admin CMS Control</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-6xl mx-auto px-4 py-8">
+
+        <!-- ================= STOREFRONT VIEW ================= -->
+        <section id="view-storefront" class="block space-y-8">
+            <!-- HERO BANNER -->
+            <div id="hero-banner" class="bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl p-8 text-white shadow-lg flex flex-col justify-center min-h-[200px]">
+                <span id="hero-badge" class="bg-white/20 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full w-max mb-3">🔥 PROMO SPESIAL</span>
+                <h1 id="hero-title" class="text-3xl font-extrabold mb-2">Panen Raya Buah Segar Berkualitas</h1>
+                <p id="hero-subtitle" class="text-green-100 max-w-md text-sm">Nikmati kesegaran buah pilihan langsung diantar ke depan pintu rumah Anda dengan jaminan garansi 100% segar.</p>
+            </div>
+
+            <!-- KATALOG & KERANJANG BLOCK -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- LIST BUAH -->
+                <div class="lg:col-span-2 space-y-4">
+                    <h2 class="text-xl font-bold text-gray-800">Daftar Buah Segar</h2>
+                    <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Rendered by JS -->
+                    </div>
+                </div>
+
+                <!-- KERANJANG & CHECKOUT FORM -->
+                <div class="bg-white rounded-xl shadow-md p-6 border border-gray-100 h-max sticky top-24">
+                    <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">🛍️ Ringkasan Keranjang</h2>
+                    <div id="cart-items" class="divide-y text-sm max-h-48 overflow-y-auto mb-4">
+                        <p class="text-gray-400 py-4 text-center">Keranjang masih kosong.</p>
+                    </div>
+
+                    <!-- PENGATURAN ALAMAT -->
+                    <div class="space-y-3 pt-4 border-t text-sm">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">Nama Penerima</label>
+                            <input type="text" id="order-name" placeholder="Contoh: Ahmad Hidayat" class="w-full border rounded p-2 focus:ring-2 focus:ring-green-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">No. WhatsApp Anda</label>
+                            <input type="number" id="order-wa" placeholder="Contoh: 62812345678" class="w-full border rounded p-2 focus:ring-2 focus:ring-green-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">Pilih Wilayah Pengiriman</label>
+                            <select id="order-shipping" onchange="updateCartUI()" class="w-full border rounded p-2 bg-gray-50 focus:ring-2 focus:ring-green-500 outline-none">
+                                <option value="10000">Area Dekat (0 - 3 KM) - Rp 10.000</option>
+                                <option value="15000" selected>Area Sedang (3 - 7 KM) - Rp 15.000</option>
+                                <option value="25000">Area Jauh (7 - 15 KM) - Rp 25.000</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- STRIP FINANSIAL -->
+                    <div class="bg-gray-50 p-3 rounded-lg my-4 text-xs space-y-2">
+                        <div class="flex justify-between"><span>Subtotal Buah:</span> <span id="val-subtotal">Rp 0</span></div>
+                        <div class="flex justify-between"><span>Ongkos Kirim:</span> <span id="val-shipping">Rp 0</span></div>
+                        <div class="flex justify-between font-bold text-sm text-gray-900 border-t pt-2">
+                            <span>Total Pembayaran:</span> <span id="val-total">Rp 0</span>
+                        </div>
+                    </div>
+
+                    <button onclick="submitCheckout()" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl transition-all shadow-md flex justify-center gap-2 text-sm">
+                        whatsapp Kirim Pesanan via WhatsApp
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ADMIN CMS VIEW ================= -->
+        <section id="view-cms" class="hidden space-y-8">
+            <div class="flex justify-between items-center border-b pb-4">
+                <h1 class="text-2xl font-black text-gray-800">Irsam Fruit Control CMS Center ⚙️</h1>
+                <button onclick="exportToCSV()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow">
+                    📥 Export Data ke Excel (.CSV)
+                </button>
+            </div>
+
+            <!-- METRICS SUMMARY PANEL -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-white p-6 rounded-xl shadow border border-gray-100">
+                    <p class="text-sm text-gray-500 font-medium">Total Pendapatan Sukses</p>
+                    <h3 class="text-2xl font-bold text-green-600 mt-1" id="cms-metric-revenue">Rp 0</h3>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow border border-gray-100">
+                    <p class="text-sm text-gray-500 font-medium">Total Transaksi Masuk</p>
+                    <h3 class="text-2xl font-bold text-gray-800 mt-1" id="cms-metric-orders">0 Orders</h3>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow border border-gray-100">
+                    <p class="text-sm text-gray-500 font-medium">Total Pelanggan Terdaftar</p>
+                    <h3 class="text-2xl font-bold text-purple-600 mt-1" id="cms-metric-crm">0 Member</h3>
+                </div>
+            </div>
+
+            <!-- BANNER MANAGER CMS -->
+            <div class="bg-white p-6 rounded-xl shadow border border-gray-100 space-y-4">
+                <h2 class="text-lg font-bold text-gray-800">⚡ Atur Banner Promo Storefront</h2>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                    <button onclick="applyBannerPreset('lebaran')" class="border p-2 rounded hover:bg-gray-50 font-medium">🌙 Idul Fitri</button>
+                    <button onclick="applyBannerPreset('weekend')" class="border p-2 rounded hover:bg-gray-50 font-medium">🎉 Weekend Diskon</button>
+                    <button onclick="applyBannerPreset('tahunbaru')" class="border p-2 rounded hover:bg-gray-50 font-medium">🎆 Tahun Baru</button>
+                    <button onclick="applyBannerPreset('panen')" class="border p-2 rounded hover:bg-gray-50 font-medium">🍎 Panen Raya</button>
+                </div>
+            </div>
+
+            <!-- INVENTARIS PRODUK & INCOMING ORDERS GRID -->
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                <!-- MANAJEMEN INVENTARIS -->
+                <div class="bg-white p-6 rounded-xl shadow border border-gray-100 space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-lg font-bold text-gray-800">📦 Daftar Inventaris Buah</h2>
+                        <button onclick="toggleAddProductForm()" class="bg-green-500 text-white text-xs px-3 py-1.5 rounded font-bold hover:bg-green-600">+ Tambah</button>
+                    </div>
+
+                    <!-- Form Tambah Buah (Hidden by default) -->
+                    <div id="add-product-form" class="hidden p-4 bg-gray-50 border rounded-lg space-y-2 text-sm">
+                        <input type="text" id="new-name" placeholder="Nama Buah (misal: Apel Fuji)" class="w-full p-2 border rounded">
+                        <div class="grid grid-cols-2 gap-2">
+                            <select id="new-category" class="p-2 border rounded">
+                                <option value="Lokal">Lokal</option>
+                                <option value="Impor">Impor</option>
+                                <option value="Organik">Organik</option>
+                            </select>
+                            <input type="number" id="new-price" placeholder="Harga per KG (Rp)" class="p-2 border rounded">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="number" id="new-stock" placeholder="Stok Awal (KG)" class="p-2 border rounded">
+                            <input type="text" id="new-icon" placeholder="Emoji Icon (cth: 🍎)" class="p-2 border rounded">
+                        </div>
+                        <button onclick="saveNewProduct()" class="w-full bg-green-600 text-white p-2 rounded font-bold">Simpan ke Database</button>
+                    </div>
+
+                    <div class="overflow-x-auto text-xs">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gray-50 text-gray-600 uppercase border-b">
+                                    <th class="p-2">Buah</th>
+                                    <th class="p-2">Kategori</th>
+                                    <th class="p-2">Harga</th>
+                                    <th class="p-2">Stok</th>
+                                    <th class="p-2 text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cms-product-table" class="divide-y">
+                                <!-- JS Injection -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow border border-gray-100 space-y-4">
+                    <h2 class="text-lg font-bold text-gray-800">📥 Live Order & Antrean Transaksi</h2>
+                    <div class="overflow-x-auto text-xs">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gray-50 text-gray-600 border-b">
+                                    <th class="p-2">ID Order</th>
+                                    <th class="p-2">Pemesan</th>
+                                    <th class="p-2">Total Bayar</th>
+                                    <th class="p-2">Status</th>
+                                    <th class="p-2 text-center">Kelola State</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cms-order-table" class="divide-y">
+                                <!-- JS Injection -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // MOCK SEED DATA (Inisialisasi Pertama Kali Jika LocalStorage Kosong)
+        const initialProducts = [
+            { id: 1, name: "Mangga Harum Manis", category: "Lokal", price: 28000, stock: 50, icon: "🥭" },
+            { id: 2, name: "Apel Fuji Premium", category: "Impor", price: 45000, stock: 35, icon: "🍎" },
+            { id: 3, name: "Alpukat Mentega Jumbo", category: "Lokal", price: 32000, stock: 8, icon: "🥑" },
+            { id: 4, name: "Pisang Cavendish Organik", category: "Organik", price: 25000, stock: 60, icon: "🍌" }
+        ];
+
+        // LOAD FROM LOCALSTORAGE / FALLBACK TO SEED DATA
+        let products = JSON.parse(localStorage.getItem('products')) || initialProducts;
+        let orders = JSON.parse(localStorage.getItem('orders')) || [];
+        let cart = {};
+
+        // INITIAL APPLICATION LOAD
+        window.onload = function() {
+            saveToStorage();
+            renderStorefront();
+            renderCMS();
+        };
+
+        function saveToStorage() {
+            localStorage.setItem('products', JSON.stringify(products));
+            localStorage.setItem('orders', JSON.stringify(orders));
+        }
+
+        function switchView(viewName) {
+            document.getElementById('view-storefront').className = viewName === 'storefront' ? 'block space-y-8' : 'hidden';
+            document.getElementById('view-cms').className = viewName === 'cms' ? 'block space-y-8' : 'hidden';
+            if(viewName === 'cms') renderCMS();
+        }
+
+        // ================= STOREFRONT CONTROLLER =================
+        function renderStorefront() {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = '';
+            
+            products.forEach(p => {
+                const isLowStock = p.stock <= 10;
+                grid.innerHTML += `
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-3xl">${p.icon}</span>
+                            <div>
+                                <h3 class="font-bold text-gray-800 text-sm">${p.name}</h3>
+                                <div class="flex gap-2 mt-0.5 items-center">
+                                    <span class="text-[10px] bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded font-semibold">${p.category}</span>
+                                    <span class="text-xs text-gray-500 font-medium">Rp \${p.price.toLocaleString('id-ID')}/kg</span>
+                                </div>
+                                <p class="text-[11px] \${isLowStock ? 'text-red-500 font-bold' : 'text-green-600'} mt-1">Stok: \${p.stock} kg</p>
+                            </div>
+                        </div>
+                        <button onclick="addToCart(\${p.id})" \${p.stock === 0 ? 'disabled class="bg-gray-300 text-gray-500 text-xs px-3 py-1.5 rounded-lg cursor-not-allowed"' : 'class="bg-green-500 hover:bg-green-600 text-white text-xs px-3 py-1.5 rounded-lg font-bold shadow-sm transition"'}>
+                            \${p.stock === 0 ? 'Habis' : '+ Beli'}
+                        </button>
+                    </div>
+                `;
+            });
+        }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product || product.stock === 0) return;
+
+            if (cart[productId]) {
+                if (cart[productId] < product.stock) cart[productId]++;
+            } else {
+                cart[productId] = 1;
+            }
+            updateCartUI();
+        }
+
+        function changeCartQty(productId, amount) {
+            if (!cart[productId]) return;
+            cart[productId] += amount;
+            if (cart[productId] <= 0) delete cart[productId];
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items');
+            container.innerHTML = '';
+            
+            let subtotal = 0;
+            const itemIds = Object.keys(cart);
+
+            if(itemIds.length === 0) {
+                container.innerHTML = \`<p class="text-gray-400 py-4 text-center">Keranjang masih kosong.</p>\`;
+            }
+
+            itemIds.forEach(id => {
+                const prod = products.find(p => p.id == id);
+                if(!prod) return;
+                const cost = prod.price * cart[id];
+                subtotal += cost;
+
+                container.innerHTML += `
+                    <div class="flex justify-between items-center py-2.5">
+                        <div>
+                            <p class="font-semibold text-gray-700 text-xs">\${prod.name}</p>
+                            <p class="text-[11px] text-gray-400">Rp \${prod.price.toLocaleString('id-ID')}/kg</p>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button onclick="changeCartQty(\${prod.id}, -1)" class="w-5 h-5 bg-gray-200 rounded flex items-center justify-center font-bold text-xs hover:bg-gray-300">-</button>
+                            <span class="font-bold text-xs w-4 text-center">\${cart[id]}</span>
+                            <button onclick="changeCartQty(\${prod.id}, 1)" class="w-5 h-5 bg-gray-200 rounded flex items-center justify-center font-bold text-xs hover:bg-gray-300">+</button>
+                            <span class="text-xs font-bold text-gray-700 ml-2">Rp \${cost.toLocaleString('id-ID')}</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            let shipping = parseInt(document.getElementById('order-shipping').value) || 0;
+            // Free ongkir minimal Rp 150.000
+            if (subtotal >= 150000) shipping = 0;
+
+            const total = subtotal + shipping;
+
+            document.getElementById('val-subtotal').innerText = `Rp \${subtotal.toLocaleString('id-ID')}`;
+            document.getElementById('val-shipping').innerText = `Rp \${shipping.toLocaleString('id-ID')}`;
+            document.getElementById('val-total').innerText = `Rp \${total.toLocaleString('id-ID')}`;
+        }
+
+        function submitCheckout() {
+            const name = document.getElementById('order-name').value;
+            const wa = document.getElementById('order-wa').value;
+            const itemIds = Object.keys(cart);
+
+            if (!name || !wa || itemIds.length === 0) {
+                alert('Mohon isi Nama, WhatsApp, dan isi keranjang belanja Anda!');
+                return;
+            }
+
+            let subtotal = 0;
+            let itemSummaryText = '';
+            let orderItemsData = [];
+
+            itemIds.forEach(id => {
+                const prod = products.find(p => p.id == id);
+                const qty = cart[id];
+                const lineCost = prod.price * qty;
+                subtotal += lineCost;
+
+                itemSummaryText += `🛒 \${qty} kg x \${prod.name} (@Rp \${prod.price.toLocaleString('id-ID')}) -> Rp \${lineCost.toLocaleString('id-ID')}\n`;
+                orderItemsData.push({ product_id: prod.id, name: prod.name, qty: qty, price: prod.price });
+            });
+
+            let shipping = subtotal >= 150000 ? 0 : parseInt(document.getElementById('order-shipping').value);
+            const total = subtotal + shipping;
+            const newOrderId = `IRSM-\${Date.now().toString().slice(-5)}`;
+
+            // BUAT RECORD PESANAN BARU KE LIVE DATABASE LOCALSTORAGE
+            const newOrder = {
+                id: newOrderId,
+                customer_name: name,
+                customer_wa: wa,
+                items: orderItemsData,
+                total_payment: total,
+                status: 'Menunggu Pembayaran',
+                date: new Date().toLocaleDateString('id-ID')
+            };
+
+            orders.push(newOrder);
+            saveToStorage();
+
+            // GENERATE WHATSAPP PAYLOAD TEXT STRING
+            const whatsappText = `🎯 *PESANAN BARU - IRSAM FRUIT STORE* 🎯\n` +
+                                 `-----------------------------------------\n` +
+                                 `ID Pesanan : *\${newOrderId}*\n` +
+                                 `Pemesan    : \${name} (\${wa})\n\n` +
+                                 `Detail Belanja:\n\${itemSummaryText}\n` +
+                                 `Subtotal   : Rp \${subtotal.toLocaleString('id-ID')}\n` +
+                                 `Ongkir 🛵  : Rp \${shipping.toLocaleString('id-ID')}\n` +
+                                 `-----------------------------------------\n` +
+                                 `💰 *Total Bayar: Rp \${total.toLocaleString('id-ID')}*\n\n` +
+                                 `Status: Menunggu Konfirmasi Validasi Pembayaran oleh Admin CMS.`;
+
+            // Buka API WA
+            window.open(`https://api.whatsapp.com/send?phone=6282112345678&text=\${encodeURIComponent(whatsappText)}`, '_blank');
+            
+            // RESET & RE-RENDER
+            cart = {};
+            updateCartUI();
+            renderStorefront();
+            alert(`Pesanan \${newOrderId} berhasil tersimpan ke sistem database internal CMS!`);
+        }
+
+        // ================= ADMIN CMS CONTROLLER =================
+        function renderCMS() {
+            // KALKULASI METRICS
+            const successfulOrders = orders.filter(o => o.status === 'Selesai');
+            const totalRevenue = successfulOrders.reduce((acc, curr) => acc + curr.total_payment, 0);
+            
+            // Kumpulkan Pelanggan Unik (CRM)
+            const uniqueCustomers = [...new Set(orders.map(o => o.customer_wa))];
+
+            document.getElementById('cms-metric-revenue').innerText = `Rp \${totalRevenue.toLocaleString('id-ID')}`;
+            document.getElementById('cms-metric-orders').innerText = `\${orders.length} Transaksi`;
+            document.getElementById('cms-metric-crm').innerText = `\${uniqueCustomers.length} Member WA`;
+
+            // INJECT PRODUK TABLE
+            const productTable = document.getElementById('cms-product-table');
+            productTable.innerHTML = '';
+            products.forEach(p => {
+                productTable.innerHTML += `
+                    <tr class="hover:bg-gray-50">
+                        <td class="p-2 font-medium">\${p.icon} \${p.name}</td>
+                        <td class="p-2">\${p.category}</td>
+                        <td class="p-2">Rp \${p.price.toLocaleString('id-ID')}</td>
+                        <td class="p-2 font-bold \${p.stock <= 10 ? 'text-red-500' : 'text-gray-700'}"\>\${p.stock} KG</td>
+                        <td class="p-2 text-center border-t">
+                            <button onclick="deleteProduct(\${p.id})" class="text-red-500 hover:text-red-700 font-semibold">Hapus</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            // INJECT LIVE ORDERS TABLE
+            const orderTable = document.getElementById('cms-order-table');
+            orderTable.innerHTML = '';
+            
+            if(orders.length === 0) {
+                orderTable.innerHTML = `<tr><td colspan="5" class="text-center p-4 text-gray-400">Belum ada antrean order masuk.</td></tr>`;
+            }
+
+            orders.forEach((o, index) => {
+                let statusBadge = 'bg-yellow-100 text-yellow-800';
+                if(o.status === 'Sedang Dikirim') statusBadge = 'bg-blue-100 text-blue-800';
+                if(o.status === 'Selesai') statusBadge = 'bg-green-100 text-green-800';
+
+                orderTable.innerHTML += `
+                    <tr class="hover:bg-gray-50 text-[11px]">
+                        <td class="p-2 font-mono font-bold text-gray-700">\${o.id}</td>
+                        <td class="p-2"><strong>\${o.customer_name}</strong><br><span class="text-gray-400">\${o.customer_wa}</span></td>
+                        <td class="p-2 font-bold text-gray-900">Rp \${o.total_payment.toLocaleString('id-ID')}</td>
+                        <td class="p-2"><span class="px-2 py-0.5 rounded-full font-semibold \${statusBadge}">\${o.status}</span></td>
+                        <td class="p-2 text-center space-x-1 whitespace-nowrap">
+                            \${o.status === 'Menunggu Pembayaran' ? `<button onclick="updateOrderStatus(\${index}, 'Sedang Dikirim')" class="bg-blue-500 text-white px-2 py-0.5 rounded font-bold hover:bg-blue-600">Proses & Potong Stok</button>` : ''}
+                            \${o.status === 'Sedang Dikirim' ? `<button onclick="updateOrderStatus(\${index}, 'Selesai')" class="bg-green-500 text-white px-2 py-0.5 rounded font-bold hover:bg-green-600">Selesai</button>` : ''}
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function updateOrderStatus(index, newStatus) {
+            const order = orders[index];
+            
+            // LOGIKA CRITICAL: Potong stok produk ketika status pesanan berubah menjadi 'Sedang Dikirim'
+            if(newStatus === 'Sedang Dikirim') {
+                let errorFlag = false;
+                
+                // Cek validasi kecukupan stok untuk seluruh item
+                order.items.forEach(item => {
+                    const product = products.find(p => p.id === item.product_id);
+                    if(product && product.stock < item.qty) {
+                        errorFlag = true;
+                        alert(`Gagal proses! Stok buah \${product.name} tidak cukup.`);
+                    }
+                });
+
+                if(errorFlag) return;
+
+                // Jika stok aman, potong nilai kuantitas produk
+                order.items.forEach(item => {
+                    const product = products.find(p => p.id === item.product_id);
+                    if(product) product.stock -= item.qty;
+                });
+            }
+
+            order.status = newStatus;
+            saveToStorage();
+            renderCMS();
+            renderStorefront();
+        }
+
+        function toggleAddProductForm() {
+            const form = document.getElementById('add-product-form');
+            form.className = form.className === 'hidden' ? 'block p-4 bg-gray-50 border rounded-lg space-y-2 text-sm' : 'hidden';
+        }
+
+        function saveNewProduct() {
+            const name = document.getElementById('new-name').value;
+            const category = document.getElementById('new-category').value;
+            const price = parseInt(document.getElementById('new-price').value);
+            const stock = parseInt(document.getElementById('new-stock').value);
+            const icon = document.getElementById('new-icon').value || '🍏';
+
+            if(!name || !price || !stock) {
+                alert('Lengkapi seluruh formulir buah baru!');
+                return;
+            }
+
+            const newProduct = {
+                id: Date.now(),
+                name: name,
+                category: category,
+                price: price,
+                stock: stock,
+                icon: icon
+            };
+
+            products.push(newProduct);
+            saveToStorage();
+            renderStorefront();
+            renderCMS();
+            toggleAddProductForm();
+            
+            // Reset input values
+            document.getElementById('new-name').value = '';
+            document.getElementById('new-price').value = '';
+            document.getElementById('new-stock').value = '';
+        }
+
+        function deleteProduct(productId) {
+            if(confirm('Hapus buah ini dari inventaris katalog toko?')) {
+                products = products.filter(p => p.id !== productId);
+                saveToStorage();
+                renderStorefront();
+                renderCMS();
+            }
+        }
+
+        // MOMENT PRESETS SYSTEM BANNER CONTROL
+        function applyBannerPreset(moment) {
+            const title = document.getElementById('hero-title');
+            const sub = document.getElementById('hero-subtitle');
+            const badge = document.getElementById('hero-badge');
+            const banner = document.getElementById('hero-banner');
+
+            if (moment === 'lebaran') {
+                title.innerText = "🌙 Selamat Hari Raya Idul Fitri Berkah";
+                sub.innerText = "Sambut hari kemenangan dengan hampers buah premium segar nan suci melimpah langsung dari petani.";
+                badge.innerText = "SPECIAL LEBARAN";
+                banner.className = "bg-gradient-to-r from-amber-600 to-yellow-600 rounded-2xl p-8 text-white shadow-lg flex flex-col justify-center min-h-[200px]";
+            } else if (moment === 'weekend') {
+                title.innerText = "🎉 Diskon Ceria Akhir Pekan!";
+                sub.innerText = "Waktunya borong buah segar keluarga. Dapatkan potongan harga instan diskon up to 20% khusus Sabtu-Minggu.";
+                badge.innerText = "WEEKEND SERU";
+                banner.className = "bg-gradient-to-r from-red-500 to-pink-600 rounded-2xl p-8 text-white shadow-lg flex flex-col justify-center min-h-[200px]";
+            } else if (moment === 'tahunbaru') {
+                title.innerText = "🎆 Semangat Pesta Tahun Baru!";
+                sub.innerText = "Stok buah segar melimpah untuk menemani malam pergantian tahun baru Anda menjadi lebih sehat ceria.";
+                badge.innerText = "NEW YEAR BLISS";
+                banner.className = "bg-gradient-to-r from-violet-600 to-indigo-700 rounded-2xl p-8 text-white shadow-lg flex flex-col justify-center min-h-[200px]";
+            } else {
+                title.innerText = "Panen Raya Buah Segar Berkualitas";
+                sub.innerText = "Nikmati kesegaran buah pilihan langsung diantar ke depan pintu rumah Anda dengan jaminan garansi 100% segar.";
+                badge.innerText = "🔥 PROMO SPESIAL";
+                banner.className = "bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl p-8 text-white shadow-lg flex flex-col justify-center min-h-[200px]";
+            }
+        }
+
+        // ENGINE EXPORT LAPORAN BI KELAS EXCEL
+        function exportToCSV() {
+            if(orders.length === 0) {
+                alert('Belum ada transaksi masuk untuk diexport!');
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "ID Transaksi,Tanggal,Nama Pemesan,WhatsApp Pelanggan,Total Pembayaran,Status Pesanan\n";
+
+            orders.forEach(o => {
+                csvContent += `\${o.id},\${o.date},\${o.customer_name},\${o.customer_wa},\${o.total_payment},\${o.status}\n`;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `Laporan_Penjualan_IrsamFruitStore_\${new Date().toISOString().slice(0,10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
