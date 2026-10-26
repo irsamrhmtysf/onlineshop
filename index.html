@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">Fruit Store | OnlineShop</title>
+    <title id="page-title">ModernShop - Toko Online Terpercaya</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for modern icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Google Material Symbols -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -18,1589 +18,1218 @@
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
                     },
-                    colors: {
-                        brand: {
-                            50: '#ecfdf5',
-                            100: '#d1fae5',
-                            500: '#10b981',
-                            600: '#059669',
-                            700: '#047857',
-                            800: '#065f46',
-                            900: '#064e3b'
-                        }
-                    }
                 }
             }
         }
     </script>
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #10b981; border-radius: 3px; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-            vertical-align: middle;
-        }
+        /* Custom scrollbar and smooth transitions */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .transition-all-custom { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
     </style>
 </head>
-<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 antialiased min-h-screen flex flex-col justify-between selection:bg-brand-500 selection:text-white transition-colors duration-300">
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col selection:bg-emerald-500 selection:text-white">
 
-    <!-- Toast Notification Container -->
-    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+    <!-- ANNOUNCEMENT BAR -->
+    <div id="announcement-bar" class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-xs sm:text-sm py-2 px-4 text-center font-medium shadow-sm relative z-50 flex items-center justify-center gap-2">
+        <i class="fa-solid fa-bullhorn animate-bounce"></i>
+        <span id="announcement-text">Selamat datang di toko kami! Nikmati promo spesial hari ini dan gratis ongkir se-Indonesia.</span>
+        <button onclick="toggleAnnouncement()" class="absolute right-4 text-white/80 hover:text-white focus:outline-none"><i class="fa-solid fa-xmark"></i></button>
+    </div>
 
-    <!-- HEADER / NAVBAR -->
-    <header class="sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur border-b border-slate-200 dark:border-slate-800 shadow-sm transition-colors duration-300">
+    <!-- HEADER / NAVIGATION -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm transition-all-custom">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <!-- Brand Logo & Name -->
-            <a href="#" onclick="switchView('store')" class="flex items-center space-x-3 group">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-600 to-emerald-400 flex items-center justify-center text-white text-2xl shadow-md group-hover:scale-105 transition-transform">
-                    <span class="material-symbols-outlined text-3xl">nutrition</span>
+            <!-- Brand Logo -->
+            <a href="#" class="flex items-center gap-3 group focus:outline-none">
+                <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-white shadow-md shadow-emerald-500/20 group-hover:scale-105 transition-transform">
+                    <i id="brand-logo-icon" class="fa-solid fa-store text-xl"></i>
                 </div>
                 <div>
-                    <h1 id="nav-store-name" class="text-xl font-bold text-slate-900 dark:text-white tracking-tight group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">Fruit Store</h1>
-                    <p id="nav-store-tagline" class="text-xs text-slate-500 dark:text-slate-400 font-medium">Buah Segar, Pilihan Keluarga</p>
+                    <h1 id="brand-name-display" class="text-lg sm:text-xl font-bold tracking-tight text-slate-900 group-hover:text-emerald-600 transition-colors">ModernShop</h1>
+                    <p id="brand-tagline-display" class="text-xs text-slate-500 hidden sm:block">Pusat Belanja Online Aman & Terpercaya</p>
                 </div>
             </a>
 
             <!-- Search Bar (Desktop) -->
             <div class="hidden md:flex flex-1 max-w-md mx-8">
                 <div class="relative w-full">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
-                        <span class="material-symbols-outlined">search</span>
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-slate-400">
+                        <i class="fa-solid fa-search"></i>
                     </span>
-                    <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="Cari buah segar (misal: Jeruk, Mangga, Alpukat)..." class="w-full pl-11 pr-4 py-2.5 bg-slate-100 dark:bg-slate-800 border border-transparent rounded-xl text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 dark:focus:ring-brand-900 transition-all">
+                    <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="Cari produk impian Anda..." class="w-full pl-11 pr-4 py-2.5 bg-slate-100 hover:bg-slate-200/60 focus:bg-white border border-transparent focus:border-emerald-500 rounded-xl text-sm focus:outline-none transition-all-custom shadow-inner">
                 </div>
             </div>
 
-            <!-- Right Actions -->
-            <div class="flex items-center space-x-2 sm:space-x-3">
-                <!-- Dark Mode Toggle -->
-                <button onclick="toggleDarkMode()" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition-all" title="Tema">
-                    <span id="dark-mode-icon" class="material-symbols-outlined"></span>
+            <!-- Action Buttons -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <!-- Order History Button -->
+                <button onclick="openOrderHistoryModal()" class="relative p-2.5 sm:px-4 sm:py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-sm flex items-center gap-2 transition-all-custom focus:outline-none" title="Riwayat Pesanan">
+                    <i class="fa-solid fa-clock-rotate-left text-emerald-600"></i>
+                    <span class="hidden lg:inline">Riwayat Pesanan</span>
+                    <span id="order-badge" class="absolute -top-1 -right-1 bg-emerald-600 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold hidden shadow">0</span>
                 </button>
 
                 <!-- Cart Button -->
-                <button onclick="toggleCartDrawer(true)" class="relative p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400 transition-all flex items-center space-x-2">
-                    <span class="material-symbols-outlined">shopping_cart</span>
-                    <span class="hidden sm:inline text-sm font-semibold"></span>
-                    <span id="cart-badge" class="absolute -top-1.5 -right-1.5 bg-rose-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-sm scale-0 transition-transform duration-200">0</span>
+                <button onclick="toggleCartModal(true)" class="relative p-2.5 sm:px-4 sm:py-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-medium text-sm flex items-center gap-2 transition-all-custom focus:outline-none" title="Keranjang Belanja">
+                    <i class="fa-solid fa-shopping-cart text-emerald-600 text-lg"></i>
+                    <span class="hidden sm:inline">Keranjang</span>
+                    <span id="cart-badge" class="absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold shadow">0</span>
                 </button>
 
-                <!-- Orders History Button -->
-                <button onclick="openOrdersModal()" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400 transition-all flex items-center space-x-2" title="Pesanan">
-                    <span class="material-symbols-outlined">receipt_long</span>
-                    <span class="hidden sm:inline text-sm font-semibold"></span>
-                </button>
-
-                <!-- Admin Access / CMS Toggle -->
-                <button onclick="handleAdminNavClick()" id="admin-nav-btn" class="px-4 py-2.5 rounded-xl bg-slate-900 dark:bg-brand-600 hover:bg-slate-800 dark:hover:bg-brand-700 text-white text-sm font-semibold shadow-sm transition-all flex items-center space-x-2">
-                    <span class="material-symbols-outlined">shield_person</span>
-                    <span id="admin-btn-text"></span>
+                <!-- Admin Mode Toggle Button -->
+                <button onclick="toggleAdminPanel()" class="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-medium text-sm flex items-center gap-2 transition-all-custom shadow-md focus:outline-none" title="Admin Panel">
+                    <i class="fa-solid fa-gear text-emerald-400"></i>
+                    <span class="hidden md:inline" id="admin-btn-text">Admin CMS</span>
                 </button>
             </div>
         </div>
         <!-- Mobile Search Bar -->
-        <div class="md:hidden px-4 pb-3">
+        <div class="px-4 pb-3 md:hidden">
             <div class="relative w-full">
-                <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
-                    <span class="material-symbols-outlined">search</span>
+                <span class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-slate-400">
+                    <i class="fa-solid fa-search"></i>
                 </span>
-                <input type="text" oninput="handleSearch(this.value)" placeholder="Cari buah segar..." class="w-full pl-11 pr-4 py-2 bg-slate-100 dark:bg-slate-800 border border-transparent rounded-xl text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:border-brand-500 transition-all">
+                <input type="text" id="mobile-search-input" oninput="handleSearch(this.value)" placeholder="Cari produk impian..." class="w-full pl-11 pr-4 py-2 bg-slate-100 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-emerald-500">
             </div>
         </div>
     </header>
 
-    <!-- MAIN VIEW CONTAINER -->
+    <!-- MAIN CONTENT CONTAINER -->
     <main class="flex-grow">
-        <!-- ================= CUSTOMER STOREFRONT ================= -->
-        <div id="view-store" class="space-y-8 pb-16">
-            <!-- Hero Banner Section (Toggleable via CMS with Seasonal Presets) -->
-            <section id="hero-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-                <div id="hero-banner-container" class="relative rounded-3xl overflow-hidden shadow-xl p-8 sm:p-12 transition-all duration-300">
-                    <div class="absolute inset-0 bg-black/25 backdrop-blur-[2px] z-0"></div>
-                    <div class="relative z-10 max-w-2xl text-white space-y-4">
-                        <span id="hero-badge" class="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white/20 backdrop-blur-md border border-white/30 text-white">
-                            <span class="material-symbols-outlined text-amber-300 text-sm">bolt</span> <span id="hero-badge-text">Promo Spesial Musim Ini</span>
-                        </span>
-                        <h2 id="hero-title" class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">Panen Raya Buah Segar Premium</h2>
-                        <p id="hero-subtitle" class="text-base sm:text-lg text-white/95 font-light leading-relaxed">Dipetik langsung dari kebun pilihan terbaik dengan standar kualitas tinggi, langsung diantar ke depan pintu rumah Anda.</p>
-                        
-                        <!-- Freshness Guarantee Tagline controlled by Admin -->
-                        <div id="hero-garansi-box" class="flex items-center space-x-2 pt-1 text-emerald-200 text-sm font-semibold">
-                            <span class="material-symbols-outlined text-amber-300">verified</span>
-                            <span id="hero-garansi-text">Garansi Kesegaran: 100% Ganti Baru Jika Busuk</span>
-                        </div>
-
-                        <div class="pt-2 flex flex-wrap gap-4">
-                            <a href="#product-catalog" onclick="playSound('click')" class="px-6 py-3.5 rounded-2xl bg-white text-slate-900 font-bold text-sm shadow-lg hover:bg-brand-50 transition-all flex items-center space-x-2">
-                                <span>Belanja Sekarang</span>
-                                <span class="material-symbols-outlined text-sm">arrow_downward</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Store Info Quick Bar (WhatsApp & Features) -->
-            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="flex items-center space-x-4 p-2">
-                        <div class="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xl shrink-0">
-                            <span class="material-symbols-outlined">support_agent</span>
-                        </div>
-                        <div>
-                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Layanan WhatsApp Toko</p>
-                            <p id="store-whatsapp-display" class="text-sm font-semibold text-slate-800 dark:text-slate-200">+62 812-3456-7890</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Product Catalog Section -->
-            <section id="product-catalog" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-                <!-- Category Filter Bar -->
-                <div class="flex items-center justify-between flex-wrap gap-4 border-b border-slate-200 dark:border-slate-800 pb-4">
-                    <div class="flex items-center space-x-2 overflow-x-auto pb-2 sm:pb-0 max-w-full" id="category-tabs">
-                        <!-- Rendered dynamically -->
-                    </div>
-                    <div class="text-xs font-medium text-slate-500 dark:text-slate-400">
-                        Menampilkan <span id="product-count" class="font-bold text-slate-800 dark:text-slate-200">0</span> produk
-                    </div>
-                </div>
-
-                <!-- Products Grid -->
-                <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    <!-- Rendered dynamically -->
-                </div>
-            </section>
-        </div>
-
-        <!-- ================= ADMIN CMS DASHBOARD ================= -->
-        <div id="view-admin" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fade-in">
-            <!-- Admin Header & Tabs -->
-            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                <div class="flex items-center space-x-4">
-                    <div class="w-14 h-14 rounded-2xl bg-slate-900 dark:bg-brand-600 text-white flex items-center justify-center text-2xl shadow">
-                        <span class="material-symbols-outlined text-3xl">tune</span>
-                    </div>
-                    <div>
-                        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Admin CMS Dashboard</h2>
-                        <p class="text-sm text-slate-500 dark:text-slate-400">Kelola Identitas Toko, Hero Banner Musiman, Produk, Stok, dan Pesanan</p>
-                    </div>
-                </div>
-                <div class="flex items-center space-x-3 w-full md:w-auto">
-                    <button onclick="switchView('store')" class="flex-1 md:flex-none px-5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold text-sm transition-all flex items-center justify-center space-x-2">
-                        <span class="material-symbols-outlined text-sm">storefront</span>
-                        <span>Lihat Toko</span>
-                    </button>
-                    <button onclick="handleAdminLogout()" class="px-5 py-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/50 hover:bg-rose-100 dark:hover:bg-rose-900/50 text-rose-600 dark:text-rose-400 font-semibold text-sm transition-all flex items-center space-x-2">
-                        <span class="material-symbols-outlined text-sm">logout</span>
-                        <span>Keluar</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Admin Navigation Tabs -->
-            <div class="flex space-x-2 border-b border-slate-200 dark:border-slate-800 overflow-x-auto">
-                <button onclick="switchAdminTab('products')" id="admin-tab-products" class="px-6 py-3 font-bold text-sm border-b-2 border-brand-600 text-brand-600 dark:text-brand-400 transition-all flex items-center space-x-2 whitespace-nowrap">
-                    <span class="material-symbols-outlined text-sm">inventory_2</span>
-                    <span>Manajemen Produk</span>
-                </button>
-                <button onclick="switchAdminTab('identity')" id="admin-tab-identity" class="px-6 py-3 font-semibold text-sm border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-all flex items-center space-x-2 whitespace-nowrap">
-                    <span class="material-symbols-outlined text-sm">badge</span>
-                    <span>Toko</span>
-                </button>
-                <button onclick="switchAdminTab('hero')" id="admin-tab-hero" class="px-6 py-3 font-semibold text-sm border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-all flex items-center space-x-2 whitespace-nowrap">
-                    <span class="material-symbols-outlined text-sm">view_carousel</span>
-                    <span>Banner</span>
-                </button>
-                <button onclick="switchAdminTab('orders')" id="admin-tab-orders" class="px-6 py-3 font-semibold text-sm border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-all flex items-center space-x-2 whitespace-nowrap">
-                    <span class="material-symbols-outlined text-sm">orders</span>
-                    <span>Pesanan</span>
-                </button>
-            </div>
-
-            <!-- TAB 1: PRODUCTS & INVENTORY CRUD -->
-            <div id="admin-content-products" class="space-y-6">
-                <div class="flex items-center justify-between">
-                    <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center space-x-2">
-                        <span class="material-symbols-outlined text-brand-600">box</span>
-                        <span>Daftar Katalog Buah & Stok</span>
-                    </h3>
-                    <button onclick="openProductModal()" class="px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm shadow-sm transition-all flex items-center space-x-2">
-                        <span class="material-symbols-outlined text-sm">add</span>
-                        <span>Tambah Buah Baru</span>
-                    </button>
-                </div>
-                <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                                    <th class="py-4 px-6">Buah</th>
-                                    <th class="py-4 px-6">Kategori</th>
-                                    <th class="py-4 px-6">Harga (Rp)</th>
-                                    <th class="py-4 px-6">Stok Aktif</th>
-                                    <th class="py-4 px-6">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="admin-product-table-body" class="divide-y divide-slate-100 dark:divide-slate-800 text-sm">
-                                <!-- Populated dynamically -->
-                            </tbody>
-                        </table>
+        <!-- HERO BANNER SECTION -->
+        <section id="hero-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
+            <div id="hero-banner-container" class="relative rounded-3xl overflow-hidden bg-gradient-to-r from-slate-900 via-slate-800 to-emerald-950 text-white shadow-2xl p-8 sm:p-14 flex flex-col justify-center min-h-[320px]">
+                <div class="absolute inset-0 opacity-20 bg-cover bg-center" id="hero-bg-image" style="background-image: url('https://placehold.co/1200x600/1e293b/ffffff?text=Banner+Shop');"></div>
+                <div class="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-900/60 to-transparent"></div>
+                
+                <div class="relative z-10 max-w-2xl space-y-4">
+                    <span id="hero-tag" class="inline-block px-3.5 py-1.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs sm:text-sm font-semibold tracking-wide uppercase backdrop-blur-md">Koleksi Terbaru 2026</span>
+                    <h2 id="hero-title" class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">Belanja Praktis, Cepat & Aman Tanpa Ribet</h2>
+                    <p id="hero-subtitle" class="text-slate-300 text-sm sm:text-base leading-relaxed">Temukan ribuan produk pilihan kualitas terbaik langsung dari genggaman Anda. Kirim pesanan instan via WhatsApp.</p>
+                    <div class="pt-2 flex flex-wrap gap-3">
+                        <a href="#product-section" class="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm shadow-lg shadow-emerald-600/30 transition-all-custom flex items-center gap-2">
+                            <span>Mulai Belanja</span>
+                            <i class="fa-solid fa-arrow-down"></i>
+                        </a>
+                        <button onclick="toggleCartModal(true)" class="px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-sm backdrop-blur-md border border-white/20 transition-all-custom">
+                            Lihat Keranjang
+                        </button>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- TAB 2: STORE IDENTITY CMS -->
-            <div id="admin-content-identity" class="hidden space-y-6">
-                <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm max-w-3xl">
-                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-1 flex items-center space-x-2">
-                        <span class="material-symbols-outlined text-brand-600">store</span>
-                        <span>Pengaturan Identitas Toko & Footer</span>
-                    </h3>
-                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Ubah nama toko, tagline, nomor WhatsApp resmi, dan alamat footer.</p>
-                    
-                    <form onsubmit="saveStoreIdentity(event)" class="space-y-5">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Nama Toko</label>
-                            <input type="text" id="cms-store-name" required class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:border-brand-500 font-semibold">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Tagline / Slogan Toko</label>
-                            <input type="text" id="cms-store-tagline" required class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:border-brand-500">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Alamat Footer Toko</label>
-                            <textarea id="cms-store-address" rows="3" required class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:border-brand-500"></textarea>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Nomor WhatsApp Resmi (Format: 628xxxxxxxxxx)</label>
-                            <input type="text" id="cms-store-whatsapp" required class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:border-brand-500 font-mono">
-                            <p class="text-xs text-slate-400 mt-1">Digunakan untuk menerima pesanan universal dari pelanggan.</p>
-                        </div>
-                        <div class="pt-4 flex justify-end">
-                            <button type="submit" class="px-6 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm shadow-sm transition-all flex items-center space-x-2">
-                                <span class="material-symbols-outlined text-sm">save</span>
-                                <span>Simpan Identitas Toko</span>
-                            </button>
-                        </div>
-                    </form>
+        <!-- CATEGORIES & FILTERS -->
+        <section id="product-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+                <div>
+                    <h3 class="text-2xl font-bold text-slate-900">Katalog Produk Pilihan</h3>
+                    <p class="text-slate-500 text-sm">Pilih kategori favorit Anda di bawah ini</p>
+                </div>
+                <!-- Category Tabs -->
+                <div id="category-filters" class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+                    <button onclick="filterCategory('All')" class="category-btn active px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap bg-emerald-600 text-white shadow-sm transition-all-custom">Semua Produk</button>
+                    <button onclick="filterCategory('Elektronik')" class="category-btn px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 transition-all-custom">Elektronik</button>
+                    <button onclick="filterCategory('Fashion')" class="category-btn px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 transition-all-custom">Fashion</button>
+                    <button onclick="filterCategory('Aksesoris')" class="category-btn px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 transition-all-custom">Aksesoris</button>
+                    <button onclick="filterCategory('Rumah Tangga')" class="category-btn px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 transition-all-custom">Rumah Tangga</button>
                 </div>
             </div>
 
-            <!-- TAB 3: HERO BANNER CMS WITH SEASONAL PRESETS -->
-            <div id="admin-content-hero" class="hidden space-y-6">
-                <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm max-w-3xl space-y-6">
-                    <div>
-                        <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-1 flex items-center space-x-2">
-                            <span class="material-symbols-outlined text-brand-600">celebration</span>
-                            <span>Hero Banner Musiman CMS</span>
-                        </h3>
-                        <p class="text-sm text-slate-500 dark:text-slate-400">Pilih momen spesial atau sesuaikan banner utama sesuai tren bisnis saat ini.</p>
-                    </div>
-
-                    <!-- Seasonal Presets Quick Selector -->
-                    <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-3">
-                        <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Pilih Preset Momen Spesial</label>
-                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                            <button type="button" onclick="applyPreset('lebaran')" class="p-3 rounded-xl bg-emerald-700 text-white font-bold text-xs shadow-sm hover:scale-105 transition-all text-center">🌙 Spesial Idul Fitri</button>
-                            <button type="button" onclick="applyPreset('weekend')" class="p-3 rounded-xl bg-amber-600 text-white font-bold text-xs shadow-sm hover:scale-105 transition-all text-center">🎉 Diskon Weekend</button>
-                            <button type="button" onclick="applyPreset('newyear')" class="p-3 rounded-xl bg-indigo-700 text-white font-bold text-xs shadow-sm hover:scale-105 transition-all text-center">🎆 Tahun Baru</button>
-                            <button type="button" onclick="applyPreset('normal')" class="p-3 rounded-xl bg-slate-900 dark:bg-slate-700 text-white font-bold text-xs shadow-sm hover:scale-105 transition-all text-center">🌱 Panen Raya Standard</button>
-                        </div>
-                    </div>
-                    
-                    <form onsubmit="saveHeroBanner(event)" class="space-y-5">
-                        <div class="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-2xl">
-                            <div>
-                                <span class="font-bold text-slate-800 dark:text-slate-200 block text-sm">Status Banner Utama</span>
-                                <span class="text-xs text-slate-500 dark:text-slate-400">Tampilkan atau sembunyikan banner di halaman utama</span>
-                            </div>
-                            <label class="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" id="cms-hero-active" class="sr-only peer">
-                                <div class="w-11 h-6 bg-slate-200 dark:bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-600"></div>
-                            </label>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Teks Badge / Label Kecil</label>
-                            <input type="text" id="cms-hero-badge" required class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:border-brand-500">
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Judul Utama Banner</label>
-                            <input type="text" id="cms-hero-title" required class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:border-brand-500 font-bold">
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Subjudul / Deskripsi Banner</label>
-                            <textarea id="cms-hero-subtitle" rows="3" required class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:border-brand-500"></textarea>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Garansi Kesegaran Tagline</label>
-                            <input type="text" id="cms-hero-garansi" required class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:border-brand-500">
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Tema Gradasi Warna Banner</label>
-                            <select id="cms-hero-theme" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:border-brand-500 font-semibold">
-                                <option value="from-emerald-700 via-emerald-600 to-teal-900">Hijau Zamrud Segar (Idul Fitri / Standar)</option>
-                                <option value="from-amber-700 via-orange-600 to-rose-900">Senja Panen Raya (Weekend Sale)</option>
-                                <option value="from-indigo-900 via-blue-800 to-slate-900">Biru Elegan (Tahun Baru)</option>
-                                <option value="from-purple-900 via-fuchsia-800 to-pink-900">Ungu Mewah Spesial</option>
-                            </select>
-                        </div>
-
-                        <div class="pt-4 flex justify-end">
-                            <button type="submit" class="px-6 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm shadow-sm transition-all flex items-center space-x-2">
-                                <span class="material-symbols-outlined text-sm">save</span>
-                                <span>Simpan Banner Utama</span>
-                            </button>
-                        </div>
-                    </form>
-                </div>
+            <!-- PRODUCT GRID -->
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Products will be injected dynamically -->
             </div>
-
-            <!-- TAB 4: ORDERS MANAGEMENT (MANUAL WA DISPATCH) -->
-            <div id="admin-content-orders" class="hidden space-y-6">
-                <div class="flex items-center justify-between">
-                    <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center space-x-2">
-                        <span class="material-symbols-outlined text-brand-600">list_alt</span>
-                        <span>Daftar Pesanan Masuk (Manual WhatsApp Dispatch)</span>
-                    </h3>
-                    <span class="text-xs font-semibold bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300">Non-Spam Mode</span>
-                </div>
-                <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                                    <th class="py-4 px-6">ID Pesanan & Tanggal</th>
-                                    <th class="py-4 px-6">Pelanggan</th>
-                                    <th class="py-4 px-6">Detail Buah & Total</th>
-                                    <th class="py-4 px-6">Status Pesanan</th>
-                                    <th class="py-4 px-6">Kirim WhatsApp Manual</th>
-                                </tr>
-                            </thead>
-                            <tbody id="admin-orders-table-body" class="divide-y divide-slate-100 dark:divide-slate-800 text-sm">
-                                <!-- Populated dynamically -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            <div id="no-products" class="hidden text-center py-16">
+                <i class="fa-solid fa-box-open text-4xl text-slate-300 mb-3"></i>
+                <p class="text-slate-500 font-medium">Tidak ada produk yang ditemukan.</p>
             </div>
-        </div>
+        </section>
     </main>
 
-    <!-- FOOTER (Fully customizable by Admin Identity CMS) -->
-    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 mt-16 py-12 transition-colors duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white text-lg">
-                    <span class="material-symbols-outlined">nutrition</span>
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 mt-20 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="space-y-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-bold shadow">
+                        <i id="footer-logo-icon" class="fa-solid fa-store"></i>
+                    </div>
+                    <span id="footer-brand-name" class="text-lg font-bold text-white">ModernShop</span>
                 </div>
-                <div>
-                    <h2 id="footer-store-name" class="font-bold text-slate-900 dark:text-white">Fruit Store</h2>
-                    <p id="footer-store-tagline" class="text-xs text-slate-500 dark:text-slate-400">Pusat Buah Segar Berkualitas</p>
-                </div>
+                <p id="footer-tagline" class="text-sm text-slate-400">Pusat belanja online praktis dan modern dengan sistem pemesanan langsung WhatsApp yang cepat dan aman.</p>
             </div>
-            <p id="footer-store-address" class="text-xs text-slate-500 dark:text-slate-400 max-w-sm">Jl. Buah Segar No. 88, Kota Batam • Melayani pengiriman instan setiap hari.</p>
-            <p class="text-xs text-slate-400">&copy; 2026 Fruit Store. All rights reserved.</p>
+            <div>
+                <h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Navigasi Cepat</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#" class="hover:text-white transition-colors">Beranda Utama</a></li>
+                    <li><a href="#product-section" class="hover:text-white transition-colors">Katalog Produk</a></li>
+                    <li><button onclick="openOrderHistoryModal()" class="hover:text-white transition-colors">Riwayat Pesanan</button></li>
+                    <li><button onclick="toggleCartModal(true)" class="hover:text-white transition-colors">Keranjang Belanja</button></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Layanan Pelanggan</h4>
+                <p class="text-sm mb-3">Butuh bantuan pesanan? Hubungi admin resmi kami kapan saja.</p>
+                <a id="footer-wa-link" href="https://wa.me/6281234567890" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-sm transition-all-custom shadow-lg shadow-emerald-600/20">
+                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                    <span id="footer-wa-text">Chat WhatsApp Admin</span>
+                </a>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 border-t border-slate-800 text-center text-xs text-slate-500">
+            &copy; 2026 <span id="copyright-brand">ModernShop</span>. Seluruh hak cipta dilindungi undang-undang.
         </div>
     </footer>
 
-    <!-- CART SLIDE-OVER DRAWER -->
-    <div id="cart-drawer" class="fixed inset-0 z-50 overflow-hidden hidden">
-        <div class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity" onclick="toggleCartDrawer(false)"></div>
+    <!-- CART SIDEBAR MODAL -->
+    <div id="cart-modal" class="fixed inset-0 z-50 overflow-hidden hidden">
+        <div class="absolute inset-0 bg-slate-950/60 backdrop-blur-sm transition-opacity" onclick="toggleCartModal(false)"></div>
         <div class="absolute inset-y-0 right-0 max-w-full flex pl-10">
-            <div class="w-screen max-w-md bg-white dark:bg-slate-900 shadow-2xl flex flex-col justify-between transition-colors">
+            <div class="w-screen max-w-md bg-white shadow-2xl flex flex-col">
                 <!-- Cart Header -->
-                <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-                    <h3 class="font-bold text-lg text-slate-900 dark:text-white flex items-center space-x-2">
-                        <span class="material-symbols-outlined text-brand-600">shopping_cart</span>
-                        <span>Keranjang Belanja Buah</span>
-                    </h3>
-                    <button onclick="toggleCartDrawer(false)" class="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
-                        <span class="material-symbols-outlined">close</span>
-                    </button>
+                <div class="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-shopping-cart text-emerald-600"></i>
+                        <h3 class="font-bold text-lg text-slate-900">Keranjang Belanja</h3>
+                    </div>
+                    <button onclick="toggleCartModal(false)" class="p-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-200/60 transition-all-custom"><i class="fa-solid fa-xmark text-lg"></i></button>
                 </div>
-                <!-- Cart Items List -->
-                <div id="cart-items-container" class="flex-1 overflow-y-auto p-6 space-y-4 divide-y divide-slate-100 dark:divide-slate-800">
-                    <!-- Populated dynamically -->
+                <!-- Cart Items Container -->
+                <div id="cart-items-container" class="flex-1 overflow-y-auto p-6 space-y-4 divide-y divide-slate-100">
+                    <!-- Cart items injected here -->
                 </div>
-                <!-- Cart Footer & Checkout -->
-                <div class="p-6 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 space-y-4">
-                    <div class="space-y-1.5">
-                        <div class="flex justify-between text-sm text-slate-500 dark:text-slate-400">
-                            <span>Subtotal Buah</span>
-                            <span id="cart-subtotal" class="font-semibold text-slate-800 dark:text-slate-200">Rp 0</span>
+                <!-- Cart Footer & Checkout Form -->
+                <div class="p-6 border-t border-slate-100 bg-slate-50 space-y-4">
+                    <div class="flex items-center justify-between text-base font-bold text-slate-900">
+                        <span>Total Pembayaran:</span>
+                        <span id="cart-total-price" class="text-emerald-600 text-xl">Rp 0</span>
+                    </div>
+
+                    <!-- Customer Checkout Inputs -->
+                    <div class="space-y-3 pt-2">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Pemesan</label>
+                            <input type="text" id="checkout-name" placeholder="Masukkan nama lengkap Anda" class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-emerald-500">
                         </div>
-                        <div class="flex justify-between text-sm text-slate-500 dark:text-slate-400">
-                            <span>Estimasi Kirim (Instan)</span>
-                            <span class="font-semibold text-emerald-600 dark:text-emerald-400">Gratis / Menyesuaikan</span>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Nomor WhatsApp / HP</label>
+                            <input type="tel" id="checkout-phone" placeholder="Contoh: 08123456789" class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-emerald-500">
                         </div>
-                        <div class="flex justify-between text-base font-bold text-slate-900 dark:text-white pt-2 border-t border-slate-200 dark:border-slate-700">
-                            <span>Total Pembayaran</span>
-                            <span id="cart-total" class="text-brand-600 dark:text-brand-400 text-lg">Rp 0</span>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Alamat Pengiriman Lengkap</label>
+                            <textarea id="checkout-address" rows="2" placeholder="Masukkan alamat lengkap tujuan pengiriman..." class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-emerald-500 resize-none"></textarea>
                         </div>
                     </div>
-                    <button onclick="openCheckoutModal()" class="w-full py-3.5 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm shadow-lg shadow-brand-600/20 transition-all flex items-center justify-center space-x-2">
-                        <span class="material-symbols-outlined text-lg">send</span>
-                        <span>Lanjut Checkout</span>
+
+                    <button onclick="processCheckout()" class="w-full py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-lg shadow-emerald-600/30 transition-all-custom flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                        <span>Checkout & Kirim ke WhatsApp Admin</span>
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- PRODUCT DETAIL MODAL -->
-    <div id="product-modal" class="fixed inset-0 z-50 overflow-y-auto hidden flex items-center justify-center p-4">
-        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onclick="closeProductModal()"></div>
-        <div class="relative bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl z-10 animate-fade-in space-y-6">
-            <div class="flex items-center justify-between">
-                <h3 id="modal-product-title" class="text-xl font-bold text-slate-900 dark:text-white">Detail Produk Buah</h3>
-                <button onclick="closeProductModal()" class="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-            </div>
-            <div class="rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800 h-64 relative flex items-center justify-center">
-                <img id="modal-product-img" src="" alt="Buah" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/10b981/ffffff?text=Fruit'">
-                <span id="modal-product-badge" class="absolute top-3 left-3 px-3 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-full text-xs font-bold text-slate-800 dark:text-slate-100 shadow-sm">Kategori</span>
-            </div>
-            <div class="space-y-3">
-                <div class="flex items-center justify-between">
-                    <span id="modal-product-price" class="text-2xl font-extrabold text-brand-600 dark:text-brand-400">Rp 0</span>
-                    <span id="modal-product-stock" class="text-xs font-bold px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400">Stok Tersedia</span>
+    <!-- ORDER HISTORY MODAL -->
+    <div id="order-history-modal" class="fixed inset-0 z-50 overflow-y-auto hidden">
+        <div class="flex min-h-screen items-center justify-center p-4">
+            <div class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm transition-opacity" onclick="closeOrderHistoryModal()"></div>
+            <div class="relative bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl z-10 space-y-6 max-h-[85vh] flex flex-col">
+                <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-clock-rotate-left text-emerald-600 text-xl"></i>
+                        <h3 class="text-xl font-bold text-slate-900">Riwayat Pesanan Anda</h3>
+                    </div>
+                    <button onclick="closeOrderHistoryModal()" class="p-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100"><i class="fa-solid fa-xmark text-lg"></i></button>
                 </div>
-                <p id="modal-product-desc" class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">Deskripsi lengkap buah segar...</p>
-            </div>
-            <div class="pt-4 flex space-x-3">
-                <button id="modal-add-btn" onclick="" class="flex-1 py-3.5 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm shadow-md transition-all flex items-center justify-center space-x-2">
-                    <span class="material-symbols-outlined text-sm">add_shopping_cart</span>
-                    <span>Tambah ke Keranjang</span>
-                </button>
+                
+                <div id="order-history-list" class="flex-1 overflow-y-auto space-y-4 pr-1">
+                    <!-- Orders injected dynamically -->
+                </div>
+                
+                <div class="pt-4 border-t border-slate-100 text-center">
+                    <button onclick="closeOrderHistoryModal()" class="px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-sm transition-all-custom">Tutup</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- CHECKOUT MODAL (Manual Dispatch Non-Spam) -->
-    <div id="checkout-modal" class="fixed inset-0 z-50 overflow-y-auto hidden flex items-center justify-center p-4">
-        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onclick="closeCheckoutModal()"></div>
-        <div class="relative bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl z-10 animate-fade-in space-y-6">
-            <div class="flex items-center justify-between">
-                <h3 class="text-xl font-bold text-slate-900 dark:text-white flex items-center space-x-2">
-                    <span class="material-symbols-outlined text-brand-600">check_circle</span>
-                    <span>Formulir Pesanan</span>
-                </h3>
-                <button onclick="closeCheckoutModal()" class="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
+    <!-- NOTIFICATION POPUP MODAL (Customized Notice) -->
+    <div id="notification-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+        <div class="fixed inset-0 bg-slate-950/50 backdrop-blur-sm" onclick="closeNotificationModal()"></div>
+        <div class="relative bg-white rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl z-10 space-y-4 animate-in fade-in zoom-in duration-200">
+            <div id="notif-icon-wrapper" class="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto text-2xl shadow-inner">
+                <i id="notif-icon" class="fa-solid fa-check"></i>
             </div>
-            <form onsubmit="submitCheckoutOrder(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Nama Lengkap Penerima</label>
-                    <input type="text" id="order-name" required placeholder="Contoh: Budi Santoso" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:border-brand-500 font-semibold">
+            <div>
+                <h4 id="notif-title" class="text-lg font-bold text-slate-900">Berhasil!</h4>
+                <p id="notif-message" class="text-sm text-slate-600 mt-1">Perubahan berhasil disimpan.</p>
+            </div>
+            <button onclick="closeNotificationModal()" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm transition-all-custom">Mengerti</button>
+        </div>
+    </div>
+
+    <!-- ADMIN CMS PANEL (Full Control Dashboard) -->
+    <div id="admin-panel" class="fixed inset-0 z-50 overflow-y-auto hidden bg-slate-950/80 backdrop-blur-md">
+        <div class="min-h-screen px-2 sm:px-4 py-4 sm:py-8 flex justify-center">
+            <div class="bg-white rounded-3xl w-full max-w-6xl shadow-2xl flex flex-col overflow-hidden border border-slate-200">
+                <!-- Admin Header -->
+                <div class="bg-slate-900 text-white p-4 sm:p-6 flex items-center justify-between border-b border-slate-800">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center font-bold shadow">
+                            <i class="fa-solid fa-gear"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg sm:text-xl font-bold">Admin CMS & Dashboard Toko</h3>
+                            <p class="text-xs text-slate-400">Kontrol penuh identitas toko, produk, pesanan, dan broadcast CRM</p>
+                        </div>
+                    </div>
+                    <button onclick="toggleAdminPanel()" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white transition-all-custom"><i class="fa-solid fa-xmark text-lg"></i></button>
                 </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Nomor WhatsApp Anda</label>
-                    <input type="tel" id="order-phone" required placeholder="Contoh: 08123456789" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:border-brand-500 font-mono">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Alamat Pengiriman Lengkap</label>
-                    <textarea id="order-address" rows="3" required placeholder="Nama jalan, nomor rumah, RT/RW, Patokan..." class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:border-brand-500"></textarea>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Catatan Khusus Buah (Opsional)</label>
-                    <input type="text" id="order-notes" placeholder="Contoh: Tolong pilihkan yang manis & ranum" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:border-brand-500">
-                </div>
-                <div class="pt-4">
-                    <button type="submit" class="w-full py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-base shadow-xl shadow-emerald-600/30 transition-all flex items-center justify-center space-x-2">
-                        <span class="material-symbols-outlined text-xl">send</span>
-                        <span>Konfirmasi & Buat Pesanan</span>
+
+                <!-- Admin Navigation Tabs -->
+                <div class="bg-slate-100 px-4 py-3 border-b border-slate-200 flex flex-wrap gap-2 overflow-x-auto">
+                    <button onclick="switchAdminTab('dashboard')" class="admin-tab-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-emerald-600 text-white shadow-sm transition-all-custom flex items-center gap-2">
+                        <i class="fa-solid fa-chart-pie"></i><span>Grafik & Report</span>
                     </button>
-                    <p class="text-center text-xs text-slate-400 mt-2">Pesanan akan tercatat di riwayat Anda. Anda dapat mengirimkan invoice ke WhatsApp secara manual.</p>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- ORDERS HISTORY MODAL (CUSTOMER) -->
-    <div id="orders-history-modal" class="fixed inset-0 z-50 overflow-y-auto hidden flex items-center justify-center p-4">
-        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onclick="closeOrdersModal()"></div>
-        <div class="relative bg-white dark:bg-slate-900 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl z-10 animate-fade-in space-y-6">
-            <div class="flex items-center justify-between">
-                <h3 class="text-xl font-bold text-slate-900 dark:text-white flex items-center space-x-2">
-                    <span class="material-symbols-outlined text-brand-600">receipt_long</span>
-                    <span>Riwayat Pesanan Anda</span>
-                </h3>
-                <button onclick="closeOrdersModal()" class="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-            </div>
-            <div id="customer-orders-list" class="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
-                <!-- Rendered dynamically -->
-            </div>
-        </div>
-    </div>
-
-    <!-- ADMIN LOGIN MODAL -->
-    <div id="admin-login-modal" class="fixed inset-0 z-50 overflow-y-auto hidden flex items-center justify-center p-4">
-        <div class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm transition-opacity" onclick="closeAdminLoginModal()"></div>
-        <div class="relative bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl z-10 animate-fade-in space-y-6">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <div class="w-12 h-12 rounded-2xl bg-slate-900 dark:bg-brand-600 text-white flex items-center justify-center text-xl shadow">
-                        <span class="material-symbols-outlined">lock</span>
-                    </div>
-                    <div>
-                        <h3 class="text-xl font-bold text-slate-900 dark:text-white">Login Admin CMS</h3>
-                        <p class="text-xs text-slate-500 dark:text-slate-400">Masukkan sandi pengelola toko</p>
-                    </div>
-                </div>
-                <button onclick="closeAdminLoginModal()" class="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-            </div>
-            <form onsubmit="handleAdminLoginSubmit(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Kata Sandi Admin</label>
-                    <input type="password" id="admin-password-input" required placeholder="Default: password123" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:border-brand-500 font-semibold">
-                    <p id="admin-login-error" class="text-xs text-rose-500 mt-1.5 hidden font-medium">Kata sandi salah.</p>
-                </div>
-                <button type="submit" class="w-full py-3.5 rounded-2xl bg-slate-900 dark:bg-brand-600 hover:bg-slate-800 dark:hover:bg-brand-700 text-white font-bold text-sm shadow-lg transition-all flex items-center justify-center space-x-2">
-                    <span class="material-symbols-outlined text-sm">login</span>
-                    <span>Masuk ke Dashboard</span>
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- PRODUCT ADD/EDIT MODAL (ADMIN CRUD) -->
-    <div id="product-crud-modal" class="fixed inset-0 z-50 overflow-y-auto hidden flex items-center justify-center p-4">
-        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onclick="closeProductModalAdmin()"></div>
-        <div class="relative bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl z-10 animate-fade-in space-y-6">
-            <div class="flex items-center justify-between">
-                <h3 id="product-crud-modal-title" class="text-xl font-bold text-slate-900 dark:text-white">Tambah Buah Baru</h3>
-                <button onclick="closeProductModalAdmin()" class="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-            </div>
-            <form onsubmit="saveProductAdmin(event)" class="space-y-4">
-                <input type="hidden" id="crud-product-id">
-                <div>
-                    <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Nama Buah</label>
-                    <input type="text" id="crud-product-name" required placeholder="Contoh: Mangga Harum Manis" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:border-brand-500 font-semibold">
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Kategori</label>
-                        <select id="crud-product-category" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:border-brand-500 font-semibold">
-                            <option value="Lokal Pilihan">Lokal Pilihan</option>
-                            <option value="Buah Import">Buah Import</option>
-                            <option value="Buah Potong">Buah Potong</option>
-                            <option value="Paket Parcel">Paket Parcel</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Harga (Rp)</label>
-                        <input type="number" id="crud-product-price" required min="1000" placeholder="25000" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:border-brand-500 font-semibold">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Stok Tersedia</label>
-                        <input type="number" id="crud-product-stock" required min="0" placeholder="50" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:border-brand-500 font-semibold">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Satuan (Unit)</label>
-                        <input type="text" id="crud-product-unit" required value="kg" placeholder="kg / pak / box" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:border-brand-500">
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">URL Gambar / Foto Buah</label>
-                    <input type="url" id="crud-product-image" required placeholder="https://images.unsplash.com/..." class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:border-brand-500">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Deskripsi Buah</label>
-                    <textarea id="crud-product-desc" rows="3" required placeholder="Manis, segar, kaya vitamin C..." class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:border-brand-500"></textarea>
-                </div>
-                <div class="pt-4 flex justify-end space-x-3">
-                    <button type="button" onclick="closeProductModalAdmin()" class="px-5 py-3 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-bold text-sm hover:bg-slate-50 dark:hover:bg-slate-800">Batal</button>
-                    <button type="submit" class="px-6 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm shadow-sm transition-all flex items-center space-x-2">
-                        <span class="material-symbols-outlined text-sm">save</span>
-                        <span>Simpan Produk</span>
+                    <button onclick="switchAdminTab('identity')" class="admin-tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white hover:bg-slate-200 text-slate-700 transition-all-custom flex items-center gap-2">
+                        <i class="fa-solid fa-sliders"></i><span>Identitas & Banner</span>
+                    </button>
+                    <button onclick="switchAdminTab('products')" class="admin-tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white hover:bg-slate-200 text-slate-700 transition-all-custom flex items-center gap-2">
+                        <i class="fa-solid fa-box"></i><span>Kelola Produk</span>
+                    </button>
+                    <button onclick="switchAdminTab('orders')" class="admin-tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white hover:bg-slate-200 text-slate-700 transition-all-custom flex items-center gap-2">
+                        <i class="fa-solid fa-list-check"></i><span>Daftar Pesanan</span>
+                    </button>
+                    <button onclick="switchAdminTab('crm')" class="admin-tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white hover:bg-slate-200 text-slate-700 transition-all-custom flex items-center gap-2">
+                        <i class="fa-solid fa-bullhorn"></i><span>CRM Broadcast WA</span>
                     </button>
                 </div>
-            </form>
+
+                <!-- Admin Tab Contents -->
+                <div class="p-4 sm:p-8 flex-1 overflow-y-auto max-h-[70vh]">
+                    
+                    <!-- TAB 1: GRAFIK & REPORT -->
+                    <div id="admin-tab-dashboard" class="admin-tab-content space-y-6">
+                        <h4 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                            <span class="editable-label" onclick="promptRenameLabel(this, 'Grafik & Laporan Penjualan')">Grafik & Laporan Penjualan</span>
+                            <i class="fa-solid fa-pen text-xs text-slate-400 cursor-pointer" title="Ganti Nama"></i>
+                        </h4>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                            <div class="bg-gradient-to-br from-emerald-500 to-teal-600 text-white rounded-3xl p-6 shadow-xl space-y-2">
+                                <span class="text-xs uppercase tracking-wider text-emerald-100 font-medium">Total Pesanan Masuk</span>
+                                <div id="stat-total-orders" class="text-4xl font-extrabold">0</div>
+                                <p class="text-xs text-emerald-100">Keseluruhan order tercatat di browser</p>
+                            </div>
+                            <div class="bg-gradient-to-br from-blue-500 to-indigo-600 text-white rounded-3xl p-6 shadow-xl space-y-2">
+                                <span class="text-xs uppercase tracking-wider text-blue-100 font-medium">Total Omset Penjualan</span>
+                                <div id="stat-total-revenue" class="text-3xl font-extrabold">Rp 0</div>
+                                <p class="text-xs text-blue-100">Akumulasi nilai transaksi</p>
+                            </div>
+                            <div class="bg-gradient-to-br from-amber-500 to-orange-600 text-white rounded-3xl p-6 shadow-xl space-y-2">
+                                <span class="text-xs uppercase tracking-wider text-amber-100 font-medium">Produk Terdaftar</span>
+                                <div id="stat-total-products" class="text-4xl font-extrabold">0</div>
+                                <p class="text-xs text-amber-100">Total item dalam katalog</p>
+                            </div>
+                        </div>
+
+                        <!-- Breakdown Status Pesanan -->
+                        <div class="bg-slate-50 border border-slate-200 rounded-3xl p-6 space-y-4">
+                            <h5 class="font-bold text-slate-800 text-base">Breakdown Status Pesanan</h5>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div class="bg-white p-4 rounded-2xl border border-slate-200 flex items-center justify-between shadow-sm">
+                                    <div>
+                                        <p class="text-xs text-slate-500 font-medium uppercase">Menunggu</p>
+                                        <h6 id="count-status-menunggu" class="text-2xl font-bold text-amber-600">0</h6>
+                                    </div>
+                                    <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg"><i class="fa-solid fa-hourglass-half"></i></div>
+                                </div>
+                                <div class="bg-white p-4 rounded-2xl border border-slate-200 flex items-center justify-between shadow-sm">
+                                    <div>
+                                        <p class="text-xs text-slate-500 font-medium uppercase">Di Kirim</p>
+                                        <h6 id="count-status-dikirim" class="text-2xl font-bold text-blue-600">0</h6>
+                                    </div>
+                                    <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg"><i class="fa-solid fa-truck-fast"></i></div>
+                                </div>
+                                <div class="bg-white p-4 rounded-2xl border border-slate-200 flex items-center justify-between shadow-sm">
+                                    <div>
+                                        <p class="text-xs text-slate-500 font-medium uppercase">Selesai</p>
+                                        <h6 id="count-status-selesai" class="text-2xl font-bold text-emerald-600">0</h6>
+                                    </div>
+                                    <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg"><i class="fa-solid fa-circle-check"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: IDENTITAS & BANNER -->
+                    <div id="admin-tab-identity" class="admin-tab-content space-y-6 hidden">
+                        <div class="flex items-center justify-between">
+                            <h4 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                                <span class="editable-label" onclick="promptRenameLabel(this, 'Pengaturan Identitas Toko & Banner')">Pengaturan Identitas Toko & Banner</span>
+                                <i class="fa-solid fa-pen text-xs text-slate-400 cursor-pointer" title="Ganti Nama"></i>
+                            </h4>
+                            <button onclick="saveIdentitySettings()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm rounded-xl shadow-md transition-all-custom flex items-center gap-2">
+                                <i class="fa-solid fa-floppy-disk"></i><span>Simpan Perubahan</span>
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50 p-6 rounded-3xl border border-slate-200">
+                            <!-- Nama Toko -->
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold text-slate-700 flex items-center justify-between">
+                                    <span class="editable-label" onclick="promptRenameLabel(this, 'Nama Toko')">Nama Toko</span>
+                                    <i class="fa-solid fa-pen text-[10px] text-slate-400 cursor-pointer"></i>
+                                </label>
+                                <input type="text" id="admin-brand-name" class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-emerald-500">
+                            </div>
+                            <!-- Tagline -->
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold text-slate-700 flex items-center justify-between">
+                                    <span class="editable-label" onclick="promptRenameLabel(this, 'Tagline Toko')">Tagline Toko</span>
+                                    <i class="fa-solid fa-pen text-[10px] text-slate-400 cursor-pointer"></i>
+                                </label>
+                                <input type="text" id="admin-brand-tagline" class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-emerald-500">
+                            </div>
+                            <!-- WhatsApp Admin -->
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold text-slate-700 flex items-center justify-between">
+                                    <span class="editable-label" onclick="promptRenameLabel(this, 'Nomor WhatsApp Admin')">Nomor WhatsApp Admin</span>
+                                    <i class="fa-solid fa-pen text-[10px] text-slate-400 cursor-pointer"></i>
+                                </label>
+                                <input type="text" id="admin-whatsapp-number" placeholder="6281234567890" class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-emerald-500">
+                            </div>
+                            <!-- Logo Icon -->
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold text-slate-700 flex items-center justify-between">
+                                    <span class="editable-label" onclick="promptRenameLabel(this, 'Logo App (FontAwesome Class)')">Logo App (FontAwesome Class)</span>
+                                    <i class="fa-solid fa-pen text-[10px] text-slate-400 cursor-pointer"></i>
+                                </label>
+                                <input type="text" id="admin-logo-icon" placeholder="fa-solid fa-store" class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-emerald-500">
+                            </div>
+                        </div>
+
+                        <!-- Status Bar Pengumuman & Hero Banner Toggle Section -->
+                        <div class="bg-slate-50 p-6 rounded-3xl border border-slate-200 space-y-6">
+                            <h5 class="font-bold text-slate-900 text-base">Pengaturan Banner & Pengumuman (Teks Atas)</h5>
+                            
+                            <!-- Announcement Bar Toggle & Text -->
+                            <div class="space-y-4 p-4 bg-white rounded-2xl border border-slate-200">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h6 class="font-bold text-sm text-slate-800">Status Bar Pengumuman (Announcement Bar)</h6>
+                                        <p class="text-xs text-slate-500">Tampilkan atau sembunyikan bar pengumuman di bagian paling atas</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="admin-announcement-toggle" class="sr-only peer">
+                                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                                    </label>
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="text-xs font-semibold text-slate-700">Teks Pengumuman</label>
+                                    <input type="text" id="admin-announcement-input" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-emerald-500">
+                                </div>
+                            </div>
+
+                            <!-- Hero Banner Settings -->
+                            <div class="space-y-4 p-4 bg-white rounded-2xl border border-slate-200">
+                                <h6 class="font-bold text-sm text-slate-800">Hero Banner Utama</h6>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="space-y-1">
+                                        <label class="text-xs font-semibold text-slate-700">Judul Hero Banner</label>
+                                        <input type="text" id="admin-hero-title" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-emerald-500">
+                                    </div>
+                                    <div class="space-y-1">
+                                        <label class="text-xs font-semibold text-slate-700">Subjudul Hero Banner</label>
+                                        <input type="text" id="admin-hero-subtitle" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-emerald-500">
+                                    </div>
+                                    <div class="space-y-1 md:col-span-2">
+                                        <label class="text-xs font-semibold text-slate-700">URL Gambar Background Hero</label>
+                                        <input type="text" id="admin-hero-bg" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-emerald-500">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: KELOLA PRODUK -->
+                    <div id="admin-tab-products" class="admin-tab-content space-y-6 hidden">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                            <h4 class="text-lg font-bold text-slate-900">Manajemen Produk Katalog</h4>
+                            <button onclick="openProductFormModal()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm rounded-xl shadow-md transition-all-custom flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-plus"></i><span>Tambah Produk Baru</span>
+                            </button>
+                        </div>
+
+                        <!-- Responsive Product Table / List for Mobile & Desktop -->
+                        <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="bg-slate-100 text-slate-700 text-xs uppercase font-bold tracking-wider">
+                                            <th class="p-4">Produk</th>
+                                            <th class="p-4">Kategori</th>
+                                            <th class="p-4">Harga</th>
+                                            <th class="p-4">Stok</th>
+                                            <th class="p-4 text-center">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="admin-product-table-body" class="divide-y divide-slate-100 text-sm">
+                                        <!-- Products rows injected here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 4: DAFTAR PESANAN -->
+                    <div id="admin-tab-orders" class="admin-tab-content space-y-6 hidden">
+                        <div class="flex items-center justify-between">
+                            <h4 class="text-lg font-bold text-slate-900">Kelola Pesanan Pelanggan</h4>
+                            <span class="text-xs bg-slate-100 px-3 py-1.5 rounded-xl font-semibold text-slate-600">Total: <span id="admin-order-count">0</span> pesanan</span>
+                        </div>
+
+                        <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="bg-slate-100 text-slate-700 text-xs uppercase font-bold tracking-wider">
+                                            <th class="p-4">Kode / Waktu</th>
+                                            <th class="p-4">Pelanggan</th>
+                                            <th class="p-4">Total & Item</th>
+                                            <th class="p-4">Status</th>
+                                            <th class="p-4 text-center">Aksi & Ubah Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="admin-orders-table-body" class="divide-y divide-slate-100 text-sm">
+                                        <!-- Orders rows injected here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 5: CRM BROADCAST WA -->
+                    <div id="admin-tab-crm" class="admin-tab-content space-y-6 hidden">
+                        <div class="space-y-2">
+                            <h4 class="text-lg font-bold text-slate-900">CRM & Broadcast WhatsApp Pelanggan</h4>
+                            <p class="text-sm text-slate-500">Kirimkan promo khusus, diskon, atau pengumuman penting langsung ke nomor WhatsApp pelanggan secara cepat.</p>
+                        </div>
+
+                        <div class="bg-slate-50 p-6 rounded-3xl border border-slate-200 space-y-4">
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold text-slate-700">Nomor WhatsApp Tujuan (Pelanggan / Grup)</label>
+                                <input type="text" id="crm-phone-input" placeholder="Contoh: 628123456789 (atau biarkan kosong untuk broadcast mandiri)" class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-emerald-500">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold text-slate-700">Pesan Broadcast / Promo</label>
+                                <textarea id="crm-message-input" rows="5" placeholder="Halo Pelanggan Setia, Nikmati diskon spesial 50% hari ini di toko kami..." class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-emerald-500 resize-none"></textarea>
+                            </div>
+                            <button onclick="sendCrmBroadcast()" class="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-lg shadow-emerald-600/30 transition-all-custom flex items-center justify-center gap-2">
+                                <i class="fa-brands fa-whatsapp text-lg"></i>
+                                <span>Kirim Broadcast via WhatsApp</span>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- JAVASCRIPT APP LOGIC -->
+    <!-- PRODUCT ADD/EDIT MODAL (ADMIN) -->
+    <div id="product-form-modal" class="fixed inset-0 z-50 overflow-y-auto hidden">
+        <div class="flex min-h-screen items-center justify-center p-4">
+            <div class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm" onclick="closeProductFormModal()"></div>
+            <div class="relative bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl z-10 space-y-6">
+                <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                    <h3 id="product-modal-title" class="text-lg font-bold text-slate-900">Tambah Produk Baru</h3>
+                    <button onclick="closeProductFormModal()" class="p-2 rounded-xl text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+                </div>
+                
+                <form id="product-form" onsubmit="saveProduct(event)" class="space-y-4">
+                    <input type="hidden" id="form-product-id">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Nama Produk</label>
+                        <input type="text" id="form-product-name" required placeholder="Contoh: Smartwatch Pro" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Kategori</label>
+                            <select id="form-product-category" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-emerald-500">
+                                <option value="Elektronik">Elektronik</option>
+                                <option value="Fashion">Fashion</option>
+                                <option value="Aksesoris">Aksesoris</option>
+                                <option value="Rumah Tangga">Rumah Tangga</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Harga (Rp)</label>
+                            <input type="number" id="form-product-price" required min="0" placeholder="150000" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-emerald-500">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">URL Gambar Produk</label>
+                        <input type="url" id="form-product-image" required placeholder="https://placehold.co/400x300..." class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Deskripsi Produk</label>
+                        <textarea id="form-product-desc" rows="3" placeholder="Deskripsi lengkap produk..." class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-emerald-500 resize-none"></textarea>
+                    </div>
+
+                    <div class="pt-2 flex gap-3">
+                        <button type="button" onclick="closeProductFormModal()" class="flex-1 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm transition-all-custom">Batal</button>
+                        <button type="submit" class="flex-1 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-lg shadow-emerald-600/30 transition-all-custom">Simpan Produk</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- APPLICATION LOGIC & STATE MANAGEMENT -->
     <script>
-        /* ========================================================
-           APP STATE & LOCAL STORAGE SYNC
-           ======================================================== */
-        let storeState = {
-            darkMode: false,
-            identity: {
-                name: "Fruit Store",
-                tagline: "Buah Segar, Pilihan Keluarga",
-                address: "Jl. Buah Segar No. 88, Kota Batam",
-                whatsapp: "6281234567890"
-            },
-            hero: {
-                active: true,
-                badge: "🌙 Spesial Idul Fitri & Panen Raya",
-                title: "Hantaran Buah Segar Lebaran Istimewa",
-                subtitle: "Sajikan buah segar berkualitas tinggi untuk keluarga tercinta di Hari Raya. Dipetik langsung dari kebun terbaik.",
-                garansi: "Garansi Kesegaran: 100% Ganti Baru Jika Busuk",
-                theme: "from-emerald-700 via-emerald-600 to-teal-900"
-            },
-            products: [
-                {
-                    id: "p1",
-                    name: "Jeruk Mandarin Premium",
-                    category: "Buah Import",
-                    price: 35000,
-                    stock: 45,
-                    unit: "kg",
-                    image: "https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?auto=format&fit=crop&w=600&q=80",
-                    desc: "Jeruk mandarin pilihan berukuran besar, rasa manis segar berair banyak, kaya vitamin C."
-                },
-                {
-                    id: "p2",
-                    name: "Alpukat Mentega Super",
-                    category: "Lokal Pilihan",
-                    price: 32000,
-                    stock: 20,
-                    unit: "kg",
-                    image: "https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?auto=format&fit=crop&w=600&q=80",
-                    desc: "Alpukat mentega lokal berdaging tebal, pulen, tidak berair dan sangat lezat untuk jus atau dikonsumsi langsung."
-                },
-                {
-                    id: "p3",
-                    name: "Mangga Harum Manis",
-                    category: "Lokal Pilihan",
-                    price: 28000,
-                    stock: 5,
-                    unit: "kg",
-                    image: "https://images.unsplash.com/photo-1553279768-865429fa0078?auto=format&fit=crop&w=600&q=80",
-                    desc: "Mangga harum manis ranum dengan aroma khas yang harum, serat halus dan rasa manis legit."
-                },
-                {
-                    id: "p4",
-                    name: "Apel Fuji Segar",
-                    category: "Buah Import",
-                    price: 40000,
-                    stock: 30,
-                    unit: "kg",
-                    image: "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&w=600&q=80",
-                    desc: "Apel fuji merah ranum renyah, manis menyegarkan dengan kandungan air yang tinggi."
-                },
-                {
-                    id: "p5",
-                    name: "Buah Naga Merah Organik",
-                    category: "Lokal Pilihan",
-                    price: 22000,
-                    stock: 0,
-                    unit: "kg",
-                    image: "https://images.unsplash.com/photo-1527324789755-939bc1d83740?auto=format&fit=crop&w=600&q=80",
-                    desc: "Buah naga merah segar kaya antioksidan dan serat tinggi untuk kesehatan pencernaan."
-                },
-                {
-                    id: "p6",
-                    name: "Anggur Merah Tanpa Biji",
-                    category: "Buah Import",
-                    price: 55000,
-                    stock: 15,
-                    unit: "pak",
-                    image: "https://images.unsplash.com/photo-1537640538966-79f369143f8f?auto=format&fit=crop&w=600&q=80",
-                    desc: "Anggur merah import segar tanpa biji, renyah dan manis berkilau."
-                }
-            ],
-            orders: [],
-            cart: []
+        /* Default App State & Default Data */
+        const DEFAULT_SETTINGS = {
+            brandName: "ModernShop",
+            brandTagline: "Pusat Belanja Online Aman & Terpercaya",
+            whatsappNumber: "6281234567890",
+            logoIcon: "fa-solid fa-store",
+            announcementActive: true,
+            announcementText: "Selamat datang di toko kami! Nikmati promo spesial hari ini dan gratis ongkir se-Indonesia.",
+            heroTitle: "Belanja Praktis, Cepat & Aman Tanpa Ribet",
+            heroSubtitle: "Temukan ribuan produk pilihan kualitas terbaik langsung dari genggaman Anda. Kirim pesanan instan via WhatsApp.",
+            heroBg: "https://placehold.co/1200x600/1e293b/ffffff?text=Banner+Shop"
         };
 
-        function loadState() {
-            const saved = localStorage.getItem('fruit_store_state_v3');
-            if (saved) {
-                try {
-                    const parsed = JSON.parse(saved);
-                    storeState = { ...storeState, ...parsed };
-                } catch (e) {
-                    console.error("Error loading saved state", e);
-                }
-            }
-        }
+        const DEFAULT_PRODUCTS = [
+            { id: 1, name: "Smartwatch Wireless Pro", category: "Elektronik", price: 299000, image: "https://placehold.co/400x300/10b981/ffffff?text=Smartwatch", desc: "Jam tangan pintar dengan fitur kesehatan lengkap dan baterai tahan lama." },
+            { id: 2, name: "Sepatu Sneakers Casual", category: "Fashion", price: 349000, image: "https://placehold.co/400x300/3b82f6/ffffff?text=Sneakers", desc: "Sepatu kasual nyaman dengan desain modern untuk aktivitas sehari-hari." },
+            { id: 3, name: "Headphone Bluetooth Bass", category: "Aksesoris", price: 199000, image: "https://placehold.co/400x300/f59e0b/ffffff?text=Headphone", desc: "Headphone nirkabel dengan kualitas suara jernih dan bass mendalam." },
+            { id: 4, name: "Blender Elektrik Mini Portable", category: "Rumah Tangga", price: 159000, image: "https://placehold.co/400x300/ec4899/ffffff?text=Blender+Mini", desc: "Blender jus portable praktis yang bisa dibawa ke mana saja." }
+        ];
 
-        function saveState() {
-            localStorage.setItem('fruit_store_state_v3', JSON.stringify(storeState));
-        }
-
-        loadState();
-
-        /* ========================================================
-           DARK MODE LOGIC
-           ======================================================== */
-        function applyDarkMode() {
-            const html = document.documentElement;
-            const icon = document.getElementById('dark-mode-icon');
-            if (storeState.darkMode) {
-                html.classList.add('dark');
-                icon.innerText = 'light_mode';
-            } else {
-                html.classList.remove('dark');
-                icon.innerText = 'dark_mode';
-            }
-        }
-
-        function toggleDarkMode() {
-            playSound('click');
-            storeState.darkMode = !storeState.darkMode;
-            saveState();
-            applyDarkMode();
-        }
-
-        /* ========================================================
-           WEB AUDIO API SOUND EFFECTS
-           ======================================================== */
-        let audioCtx = null;
-        function playSound(type) {
-            try {
-                if (!audioCtx) {
-                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                }
-                if (audioCtx.state === 'suspended') {
-                    audioCtx.resume();
-                }
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-
-                const now = audioCtx.currentTime;
-                if (type === 'click') {
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(450, now);
-                    osc.frequency.exponentialRampToValueAtTime(800, now + 0.08);
-                    gain.gain.setValueAtTime(0.08, now);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
-                    osc.start(now);
-                    osc.stop(now + 0.08);
-                } else if (type === 'cart') {
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(587.33, now);
-                    osc.frequency.setValueAtTime(880, now + 0.08);
-                    gain.gain.setValueAtTime(0.1, now);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
-                    osc.start(now);
-                    osc.stop(now + 0.25);
-                } else if (type === 'success') {
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(523.25, now);
-                    osc.frequency.setValueAtTime(659.25, now + 0.1);
-                    osc.frequency.setValueAtTime(783.99, now + 0.2);
-                    gain.gain.setValueAtTime(0.12, now);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
-                    osc.start(now);
-                    osc.stop(now + 0.4);
-                }
-            } catch (e) {}
-        }
-
-        /* ========================================================
-           TOAST NOTIFICATIONS
-           ======================================================== */
-        function showToast(message, type = 'success') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            const bgClass = type === 'success' ? 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900' : 'bg-rose-600 text-white';
-            const icon = type === 'success' ? 'check_circle' : 'error';
-            
-            toast.className = `pointer-events-auto flex items-center space-x-3 px-4 py-3 rounded-2xl shadow-xl ${bgClass} text-sm font-medium animate-fade-in`;
-            toast.innerHTML = `<span class="material-symbols-outlined text-lg">${icon}</span><span>${message}</span>`;
-            
-            container.appendChild(toast);
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateY(10px)';
-                toast.style.transition = 'all 0.3s ease';
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
-
-        /* ========================================================
-           STOREFRONT RENDERING
-           ======================================================== */
-        let activeCategory = 'Semua';
+        /* Load from LocalStorage or initialize */
+        let settings = JSON.parse(localStorage.getItem('modern_shop_settings')) || DEFAULT_SETTINGS;
+        let products = JSON.parse(localStorage.getItem('modern_shop_products')) || DEFAULT_PRODUCTS;
+        let cart = JSON.parse(localStorage.getItem('modern_shop_cart')) || [];
+        let orders = JSON.parse(localStorage.getItem('modern_shop_orders')) || [];
+        let currentCategoryFilter = 'All';
         let searchQuery = '';
 
-        function renderStorefront() {
-            document.getElementById('page-title').innerText = `${storeState.identity.name} | Toko Buah Segar`;
-            document.getElementById('nav-store-name').innerText = storeState.identity.name;
-            document.getElementById('nav-store-tagline').innerText = storeState.identity.tagline;
-            document.getElementById('footer-store-name').innerText = storeState.identity.name;
-            document.getElementById('footer-store-tagline').innerText = storeState.identity.tagline;
-            document.getElementById('footer-store-address').innerText = `${storeState.identity.address} • Melayani pengiriman instan setiap hari.`;
-            document.getElementById('store-whatsapp-display').innerText = `+${storeState.identity.whatsapp.replace(/(\d{2})(\d{3})(\d{4})(\d+)/, '$1 $2-$3-$4')}`;
+        /* Initialize on load */
+        window.addEventListener('DOMContentLoaded', () => {
+            applySettingsToDOM();
+            renderProducts();
+            updateCartBadge();
+            updateOrderBadge();
+        });
 
-            // Render Hero Banner CMS
-            const heroSection = document.getElementById('hero-section');
-            const heroContainer = document.getElementById('hero-banner-container');
-            if (storeState.hero.active) {
-                heroSection.classList.remove('hidden');
-                heroContainer.className = `relative rounded-3xl overflow-hidden shadow-xl p-8 sm:p-12 transition-all duration-300 bg-gradient-to-r ${storeState.hero.theme}`;
-                document.getElementById('hero-badge-text').innerText = storeState.hero.badge;
-                document.getElementById('hero-title').innerText = storeState.hero.title;
-                document.getElementById('hero-subtitle').innerText = storeState.hero.subtitle;
-                document.getElementById('hero-garansi-text').innerText = storeState.hero.garansi;
+        /* Save settings */
+        function saveSettingsToStorage() {
+            localStorage.setItem('modern_shop_settings', JSON.stringify(settings));
+        }
+        function saveProductsToStorage() {
+            localStorage.setItem('modern_shop_products', JSON.stringify(products));
+        }
+        function saveCartToStorage() {
+            localStorage.setItem('modern_shop_cart', JSON.stringify(cart));
+            updateCartBadge();
+        }
+        function saveOrdersToStorage() {
+            localStorage.setItem('modern_shop_orders', JSON.stringify(orders));
+            updateOrderBadge();
+        }
+
+        /* Apply settings to entire page */
+        function applySettingsToDOM() {
+            document.getElementById('page-title').innerText = `${settings.brandName} - Toko Online Terpercaya`;
+            
+            // Brand sync top & bottom
+            document.getElementById('brand-name-display').innerText = settings.brandName;
+            document.getElementById('brand-tagline-display').innerText = settings.brandTagline;
+            document.getElementById('brand-logo-icon').className = settings.logoIcon;
+
+            document.getElementById('footer-brand-name').innerText = settings.brandName;
+            document.getElementById('footer-tagline').innerText = settings.brandTagline;
+            document.getElementById('footer-logo-icon').className = settings.logoIcon;
+            document.getElementById('copyright-brand').innerText = settings.brandName;
+
+            // WhatsApp link
+            const waLink = `https://wa.me/${settings.whatsappNumber}`;
+            document.getElementById('footer-wa-link').href = waLink;
+
+            // Announcement bar
+            const annBar = document.getElementById('announcement-bar');
+            if (settings.announcementActive) {
+                annBar.classList.remove('hidden');
+                document.getElementById('announcement-text').innerText = settings.announcementText;
             } else {
-                heroSection.classList.add('hidden');
+                annBar.classList.add('hidden');
             }
 
-            // Categories
-            const categories = ['Semua', ...new Set(storeState.products.map(p => p.category))];
-            const catContainer = document.getElementById('category-tabs');
-            catContainer.innerHTML = categories.map(cat => {
-                const isActive = activeCategory === cat;
-                const activeClass = isActive ? 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 shadow-sm' : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800';
-                return `<button onclick="filterCategory('${cat}')" class="px-4 py-2 rounded-xl text-sm font-semibold transition-all whitespace-nowrap ${activeClass}">${cat}</button>`;
-            }).join('');
+            // Hero banner
+            document.getElementById('hero-title').innerText = settings.heroTitle;
+            document.getElementById('hero-subtitle').innerText = settings.heroSubtitle;
+            document.getElementById('hero-bg-image').style.backgroundImage = `url('${settings.heroBg}')`;
+        }
 
-            // Filter Products
-            let filtered = storeState.products.filter(p => {
-                const matchCat = activeCategory === 'Semua' || p.category === activeCategory;
-                const matchSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || p.desc.toLowerCase().includes(searchQuery.toLowerCase());
+        /* Toggle Announcement bar manually */
+        function toggleAnnouncement() {
+            settings.announcementActive = false;
+            saveSettingsToStorage();
+            applySettingsToDOM();
+        }
+
+        /* Render Products Catalog */
+        function renderProducts() {
+            const grid = document.getElementById('product-grid');
+            const noProducts = document.getElementById('no-products');
+            grid.innerHTML = '';
+
+            let filtered = products.filter(p => {
+                let matchCat = currentCategoryFilter === 'All' || p.category === currentCategoryFilter;
+                let matchSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || p.desc.toLowerCase().includes(searchQuery.toLowerCase());
                 return matchCat && matchSearch;
             });
 
-            document.getElementById('product-count').innerText = filtered.length;
-
-            const grid = document.getElementById('product-grid');
             if (filtered.length === 0) {
-                grid.innerHTML = `
-                    <div class="col-span-full py-16 text-center space-y-3">
-                        <div class="w-16 h-16 rounded-3xl bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center text-2xl mx-auto">
-                            <span class="material-symbols-outlined text-3xl">nutrition</span>
-                        </div>
-                        <h4 class="font-bold text-slate-800 dark:text-slate-200 text-lg">Buah tidak ditemukan</h4>
-                        <p class="text-sm text-slate-500">Coba kata kunci lain atau pilih kategori berbeda.</p>
-                    </div>
-                `;
+                noProducts.classList.remove('hidden');
                 return;
+            } else {
+                noProducts.classList.add('hidden');
             }
 
-            grid.innerHTML = filtered.map(p => {
-                const isOutOfStock = p.stock <= 0;
-                const stockBadge = isOutOfStock 
-                    ? `<span class="px-2.5 py-1 rounded-full bg-rose-100 dark:bg-rose-950/50 text-rose-700 dark:text-rose-400 text-xs font-bold">Stok Habis</span>`
-                    : p.stock <= 5 
-                    ? `<span class="px-2.5 py-1 rounded-full bg-amber-100 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 text-xs font-bold">Sisa ${p.stock} ${p.unit}</span>`
-                    : `<span class="px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 text-xs font-bold">Stok: ${p.stock} ${p.unit}</span>`;
-
-                return `
-                    <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
-                        <div>
-                            <div class="relative h-48 bg-slate-100 dark:bg-slate-800 overflow-hidden cursor-pointer" onclick="openProductModal('${p.id}')">
-                                <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/600x400/10b981/ffffff?text=Fruit'">
-                                <div class="absolute top-3 left-3">
-                                    <span class="px-3 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-full text-xs font-bold text-slate-800 dark:text-slate-100 shadow-sm">${p.category}</span>
-                                </div>
-                            </div>
-                            <div class="p-5 space-y-2">
-                                <h4 onclick="openProductModal('${p.id}')" class="font-bold text-slate-900 dark:text-white text-base cursor-pointer hover:text-brand-600 dark:hover:text-brand-400 transition-colors line-clamp-1">${p.name}</h4>
-                                <p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-2">${p.desc}</p>
-                            </div>
+            filtered.forEach(p => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition-all-custom flex flex-col group";
+                card.innerHTML = `
+                    <div class="relative overflow-hidden aspect-[4/3] bg-slate-100">
+                        <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/400x300/e2e8f0/64748b?text=Produk'">
+                        <span class="absolute top-3 left-3 px-3 py-1 bg-white/90 backdrop-blur-md rounded-full text-xs font-bold text-slate-800 shadow">${p.category}</span>
+                    </div>
+                    <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+                        <div class="space-y-1.5">
+                            <h4 class="font-bold text-slate-900 text-base line-clamp-1">${p.name}</h4>
+                            <p class="text-xs text-slate-500 line-clamp-2">${p.desc}</p>
                         </div>
-                        <div class="p-5 pt-0 flex items-center justify-between mt-2">
+                        <div class="flex items-center justify-between pt-2 border-t border-slate-100">
                             <div>
-                                <span class="text-xs text-slate-400 block">Harga / ${p.unit}</span>
-                                <span class="font-extrabold text-brand-600 dark:text-brand-400 text-lg">Rp ${p.price.toLocaleString('id-ID')}</span>
+                                <span class="text-[10px] text-slate-400 block uppercase">Harga</span>
+                                <span class="font-extrabold text-emerald-600 text-base">Rp ${p.price.toLocaleString('id-ID')}</span>
                             </div>
-                            <div>
-                                ${stockBadge}
-                            </div>
-                        </div>
-                        <div class="px-5 pb-5 pt-2">
-                            <button onclick="addToCart('${p.id}')" ${isOutOfStock ? 'disabled' : ''} class="w-full py-2.5 rounded-xl ${isOutOfStock ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 cursor-not-allowed' : 'bg-slate-900 dark:bg-brand-600 hover:bg-brand-700 text-white shadow-sm'} font-semibold text-sm transition-all flex items-center justify-center space-x-2">
-                                <span class="material-symbols-outlined text-sm">add_shopping_cart</span>
-                                <span>${isOutOfStock ? 'Stok Kosong' : 'Tambah'}</span>
+                            <button onclick="addToCart(${p.id})" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md shadow-emerald-600/20 transition-all-custom flex items-center gap-1.5 active:scale-95" title="Tambah ke Keranjang">
+                                <i class="fa-solid fa-cart-plus"></i>
+                                <span>+ Beli</span>
                             </button>
                         </div>
                     </div>
                 `;
-            }).join('');
+                grid.appendChild(card);
+            });
         }
 
+        /* Filter by category */
         function filterCategory(cat) {
-            playSound('click');
-            activeCategory = cat;
-            renderStorefront();
+            currentCategoryFilter = cat;
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                if (btn.innerText.includes(cat) || (cat === 'All' && btn.innerText.includes('Semua'))) {
+                    btn.className = "category-btn active px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap bg-emerald-600 text-white shadow-sm transition-all-custom";
+                } else {
+                    btn.className = "category-btn px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 transition-all-custom";
+                }
+            });
+            renderProducts();
         }
 
+        /* Search Handler */
         function handleSearch(val) {
             searchQuery = val;
-            renderStorefront();
+            renderProducts();
         }
 
-        /* ========================================================
-           CART & CHECKOUT LOGIC
-           ======================================================== */
-        function toggleCartDrawer(open) {
-            playSound('click');
-            const drawer = document.getElementById('cart-drawer');
-            if (open) {
-                drawer.classList.remove('hidden');
-                renderCart();
-            } else {
-                drawer.classList.add('hidden');
-            }
-        }
+        /* Cart Management */
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
 
-        function addToCart(productId, qty = 1) {
-            const product = storeState.products.find(p => p.id === productId);
-            if (!product || product.stock <= 0) {
-                showToast('Maaf, stok buah ini sudah habis.', 'error');
-                return;
-            }
-
-            const existing = storeState.cart.find(item => item.id === productId);
+            const existing = cart.find(item => item.id === productId);
             if (existing) {
-                if (existing.qty + qty > product.stock) {
-                    showToast(`Stok maksimal tersisa ${product.stock} ${product.unit}`, 'error');
-                    return;
-                }
-                existing.qty += qty;
+                existing.qty += 1;
             } else {
-                if (qty > product.stock) {
-                    showToast(`Stok maksimal tersisa ${product.stock} ${product.unit}`, 'error');
-                    return;
-                }
-                storeState.cart.push({
-                    id: product.id,
-                    name: product.name,
-                    price: product.price,
-                    unit: product.unit,
-                    image: product.image,
-                    qty: qty
-                });
+                cart.push({ ...product, qty: 1 });
             }
-
-            playSound('cart');
-            saveState();
-            updateCartBadge();
-            showToast(`Berhasil menambahkan ${product.name} ke keranjang!`);
+            saveCartToStorage();
+            showNotification('Produk Ditambahkan', `+1 ${product.name} berhasil ditambahkan ke keranjang belanja.`);
         }
 
-        function updateCartItemQty(productId, delta) {
-            playSound('click');
-            const item = storeState.cart.find(i => i.id === productId);
-            const product = storeState.products.find(p => p.id === productId);
-            if (!item || !product) return;
-
-            const newQty = item.qty + delta;
-            if (newQty <= 0) {
-                storeState.cart = storeState.cart.filter(i => i.id !== productId);
-            } else if (newQty > product.stock) {
-                showToast(`Stok maksimal tersisa ${product.stock} ${product.unit}`, 'error');
-                return;
-            } else {
-                item.qty = newQty;
+        function updateCartQuantity(productId, change) {
+            const item = cart.find(i => i.id === productId);
+            if (!item) return;
+            item.qty += change;
+            if (item.qty <= 0) {
+                cart = cart.filter(i => i.id !== productId);
             }
-
-            saveState();
-            updateCartBadge();
-            renderCart();
+            saveCartToStorage();
+            renderCartModal();
         }
 
         function updateCartBadge() {
+            const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
             const badge = document.getElementById('cart-badge');
-            const totalItems = storeState.cart.reduce((sum, item) => sum + item.qty, 0);
-            badge.innerText = totalItems;
-            if (totalItems > 0) {
-                badge.classList.remove('scale-0');
-                badge.classList.add('scale-100');
+            if (totalCount > 0) {
+                badge.innerText = totalCount;
+                badge.classList.remove('hidden');
             } else {
-                badge.classList.remove('scale-100');
-                badge.classList.add('scale-0');
+                badge.classList.add('hidden');
             }
         }
 
-        function renderCart() {
+        function toggleCartModal(open) {
+            const modal = document.getElementById('cart-modal');
+            if (open) {
+                renderCartModal();
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        function renderCartModal() {
             const container = document.getElementById('cart-items-container');
-            if (storeState.cart.length === 0) {
+            container.innerHTML = '';
+
+            if (cart.length === 0) {
                 container.innerHTML = `
-                    <div class="py-16 text-center space-y-3">
-                        <div class="w-16 h-16 rounded-3xl bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center text-2xl mx-auto">
-                            <span class="material-symbols-outlined text-3xl">shopping_cart</span>
-                        </div>
-                        <h4 class="font-bold text-slate-800 dark:text-slate-200 text-base">Keranjang Anda Masih Kosong</h4>
-                        <p class="text-xs text-slate-500">Pilih buah segar favorit Anda sekarang.</p>
+                    <div class="text-center py-12 text-slate-400 space-y-2">
+                        <i class="fa-solid fa-shopping-cart text-4xl mb-2"></i>
+                        <p class="text-sm font-medium text-slate-500">Keranjang belanja Anda masih kosong.</p>
                     </div>
                 `;
-                document.getElementById('cart-subtotal').innerText = 'Rp 0';
-                document.getElementById('cart-total').innerText = 'Rp 0';
+                document.getElementById('cart-total-price').innerText = 'Rp 0';
                 return;
             }
 
-            let subtotal = 0;
-            container.innerHTML = storeState.cart.map(item => {
-                const itemTotal = item.price * item.qty;
-                subtotal += itemTotal;
-                return `
-                    <div class="flex items-center space-x-4 py-4">
-                        <img src="${item.image}" alt="${item.name}" class="w-16 h-16 rounded-2xl object-cover bg-slate-100 dark:bg-slate-800 shrink-0">
-                        <div class="flex-1 min-w-0">
-                            <h5 class="font-bold text-slate-900 dark:text-white text-sm truncate">${item.name}</h5>
-                            <p class="text-xs text-brand-600 dark:text-brand-400 font-bold mt-0.5">Rp ${item.price.toLocaleString('id-ID')} / ${item.unit}</p>
-                            <div class="flex items-center space-x-3 mt-2">
-                                <button onclick="updateCartItemQty('${item.id}', -1)" class="w-7 h-7 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold flex items-center justify-center text-xs">-</button>
-                                <span class="text-sm font-bold text-slate-800 dark:text-slate-200">${item.qty} ${item.unit}</span>
-                                <button onclick="updateCartItemQty('${item.id}', 1)" class="w-7 h-7 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold flex items-center justify-center text-xs">+</button>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <span class="font-extrabold text-slate-900 dark:text-white text-sm">Rp ${itemTotal.toLocaleString('id-ID')}</span>
+            let totalPrice = 0;
+            cart.forEach(item => {
+                totalPrice += item.price * item.qty;
+                const div = document.createElement('div');
+                div.className = "flex items-center gap-4 py-3 first:pt-0 last:pb-0";
+                div.innerHTML = `
+                    <img src="${item.image}" class="w-16 h-16 rounded-2xl object-cover border border-slate-100" onerror="this.src='https://placehold.co/100x100'">
+                    <div class="flex-1">
+                        <h5 class="font-bold text-slate-900 text-sm line-clamp-1">${item.name}</h5>
+                        <p class="text-xs text-emerald-600 font-bold mt-0.5">Rp ${(item.price * item.qty).toLocaleString('id-ID')}</p>
+                        <div class="flex items-center gap-3 mt-2">
+                            <button onclick="updateCartQuantity(${item.id}, -1)" class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold flex items-center justify-center text-xs">-</button>
+                            <span class="text-xs font-bold text-slate-800">${item.qty}</span>
+                            <button onclick="updateCartQuantity(${item.id}, 1)" class="w-7 h-7 rounded-lg bg-emerald-100 hover:bg-emerald-200 text-emerald-700 font-bold flex items-center justify-center text-xs">+</button>
                         </div>
                     </div>
                 `;
-            }).join('');
-
-            document.getElementById('cart-subtotal').innerText = `Rp ${subtotal.toLocaleString('id-ID')}`;
-            document.getElementById('cart-total').innerText = `Rp ${subtotal.toLocaleString('id-ID')}`;
-        }
-
-        function openProductModal(productId) {
-            playSound('click');
-            const product = storeState.products.find(p => p.id === productId);
-            if (!product) return;
-
-            document.getElementById('modal-product-title').innerText = product.name;
-            document.getElementById('modal-product-img').src = product.image;
-            document.getElementById('modal-product-badge').innerText = product.category;
-            document.getElementById('modal-product-price').innerText = `Rp ${product.price.toLocaleString('id-ID')} / ${product.unit}`;
-            document.getElementById('modal-product-desc').innerText = product.desc;
-            
-            const stockEl = document.getElementById('modal-product-stock');
-            const addBtn = document.getElementById('modal-add-btn');
-            
-            if (product.stock <= 0) {
-                stockEl.className = "text-xs font-bold px-3 py-1 rounded-full bg-rose-100 dark:bg-rose-950/50 text-rose-700 dark:text-rose-400";
-                stockEl.innerText = "Stok Habis";
-                addBtn.disabled = true;
-                addBtn.className = "flex-1 py-3.5 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 font-bold text-sm cursor-not-allowed flex items-center justify-center space-x-2";
-            } else {
-                stockEl.className = "text-xs font-bold px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400";
-                stockEl.innerText = `Stok Tersedia: ${product.stock} ${product.unit}`;
-                addBtn.disabled = false;
-                addBtn.className = "flex-1 py-3.5 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm shadow-md transition-all flex items-center justify-center space-x-2";
-                addBtn.onclick = () => {
-                    addToCart(product.id);
-                    closeProductModal();
-                };
-            }
-
-            document.getElementById('product-modal').classList.remove('hidden');
-        }
-
-        function closeProductModal() {
-            playSound('click');
-            document.getElementById('product-modal').classList.add('hidden');
-        }
-
-        function openCheckoutModal() {
-            if (storeState.cart.length === 0) {
-                showToast('Keranjang belanja Anda masih kosong.', 'error');
-                return;
-            }
-            playSound('click');
-            toggleCartDrawer(false);
-            document.getElementById('checkout-modal').classList.remove('hidden');
-        }
-
-        function closeCheckoutModal() {
-            playSound('click');
-            document.getElementById('checkout-modal').classList.add('hidden');
-        }
-
-        // Non-Spam Checkout: Records order without forcing auto WA redirect
-        function submitCheckoutOrder(e) {
-            e.preventDefault();
-            const name = document.getElementById('order-name').value;
-            const phone = document.getElementById('order-phone').value;
-            const address = document.getElementById('order-address').value;
-            const notes = document.getElementById('order-notes').value;
-
-            const orderId = Math.floor(100000 + Math.random() * 900000);
-            const date = new Date().toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
-
-            let subtotal = 0;
-            storeState.cart.forEach(item => {
-                subtotal += item.price * item.qty;
+                container.appendChild(div);
             });
 
-            // Deduct stock automatically
-            storeState.cart.forEach(cartItem => {
-                const prod = storeState.products.find(p => p.id === cartItem.id);
-                if (prod) {
-                    prod.stock = Math.max(0, prod.stock - cartItem.qty);
-                }
+            document.getElementById('cart-total-price').innerText = `Rp ${totalPrice.toLocaleString('id-ID')}`;
+        }
+
+        /* Checkout & WhatsApp Order */
+        function processCheckout() {
+            if (cart.length === 0) {
+                showNotification('Keranjang Kosong', 'Silakan pilih produk terlebih dahulu sebelum melakukan checkout.');
+                return;
+            }
+
+            const name = document.getElementById('checkout-name').value.trim();
+            const phone = document.getElementById('checkout-phone').value.trim();
+            const address = document.getElementById('checkout-address').value.trim();
+
+            if (!name || !phone || !address) {
+                showNotification('Data Belum Lengkap', 'Mohon isi nama, nomor WhatsApp, dan alamat pengiriman dengan lengkap.');
+                return;
+            }
+
+            const orderCode = 'ORD-' + Math.floor(100000 + Math.random() * 900000);
+            const now = new Date();
+            const timeString = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) + ' ' + now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+            let itemsSummary = '';
+            let totalPrice = 0;
+            cart.forEach((item, idx) => {
+                let subtotal = item.price * item.qty;
+                totalPrice += subtotal;
+                itemsSummary += `${idx + 1}. ${item.name} x${item.qty} = Rp ${subtotal.toLocaleString('id-ID')}\n`;
             });
 
             const newOrder = {
-                id: orderId,
-                date: date,
+                code: orderCode,
+                time: timeString,
                 name: name,
                 phone: phone,
                 address: address,
-                notes: notes,
-                items: [...storeState.cart],
-                total: subtotal,
-                status: 'Diproses'
+                items: [...cart],
+                total: totalPrice,
+                status: 'Menunggu'
             };
 
-            storeState.orders.unshift(newOrder);
-            storeState.cart = [];
-            saveState();
-            updateCartBadge();
-            closeCheckoutModal();
-            playSound('success');
-            showToast('Pesanan berhasil dibuat! Cek menu Pesanan Saya untuk kirim ke WhatsApp.');
-            renderStorefront();
+            orders.unshift(newOrder);
+            saveOrdersToStorage();
+
+            // Format WhatsApp Message
+            let waText = `Halo Admin *${settings.brandName}*, saya ingin memesan produk:\n\n` +
+                         `*Kode Pesanan:* ${orderCode}\n` +
+                         `*Waktu:* ${timeString}\n\n` +
+                         `*Data Pemesan:*\n` +
+                         `- Nama: ${name}\n` +
+                         `- No HP: ${phone}\n` +
+                         `- Alamat: ${address}\n\n` +
+                         `*Rincian Pesanan:*\n${itemsSummary}\n` +
+                         `*Total Pembayaran: Rp ${totalPrice.toLocaleString('id-ID')}*\n\n` +
+                         `Mohon segera diproses, terima kasih!`;
+
+            const encodedWa = encodeURIComponent(waText);
+            const waUrl = `https://wa.me/${settings.whatsappNumber}?text=${encodedWa}`;
+
+            // Clear cart
+            cart = [];
+            saveCartToStorage();
+            toggleCartModal(false);
+
+            // Open WhatsApp
+            window.open(waUrl, '_blank');
+            showNotification('Pesanan Berhasil Dibuat', `Pesanan ${orderCode} berhasil dikirim ke WhatsApp Admin!`);
         }
 
-        function openOrdersModal() {
-            playSound('click');
-            const container = document.getElementById('customer-orders-list');
-            if (storeState.orders.length === 0) {
-                container.innerHTML = `
-                    <div class="py-12 text-center space-y-2">
-                        <div class="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center text-xl mx-auto">
-                            <span class="material-symbols-outlined text-2xl">receipt_long</span>
-                        </div>
-                        <h4 class="font-bold text-slate-800 dark:text-slate-200 text-sm">Belum Ada Riwayat Pesanan</h4>
-                        <p class="text-xs text-slate-500">Pesanan yang Anda buat akan muncul di sini.</p>
+        /* Order History (Riwayat Pesanan with Accordion Dropdown) */
+        function openOrderHistoryModal() {
+            renderOrderHistoryList();
+            document.getElementById('order-history-modal').classList.remove('hidden');
+        }
+
+        function closeOrderHistoryModal() {
+            document.getElementById('order-history-modal').classList.add('hidden');
+        }
+
+        function updateOrderBadge() {
+            const badge = document.getElementById('order-badge');
+            if (orders.length > 0) {
+                badge.innerText = orders.length;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        function renderOrderHistoryList() {
+            const listContainer = document.getElementById('order-history-list');
+            listContainer.innerHTML = '';
+
+            if (orders.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="text-center py-12 text-slate-400 space-y-2">
+                        <i class="fa-solid fa-clock-rotate-left text-4xl mb-2"></i>
+                        <p class="text-sm font-medium text-slate-500">Belum ada riwayat pesanan tersimpan.</p>
                     </div>
                 `;
-            } else {
-                container.innerHTML = storeState.orders.map(order => {
-                    let statusColor = 'bg-amber-100 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400';
-                    if (order.status === 'Dalam Pengiriman') statusColor = 'bg-blue-100 dark:bg-blue-950/50 text-blue-700 dark:text-blue-400';
-                    if (order.status === 'Selesai') statusColor = 'bg-emerald-100 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400';
+                return;
+            }
 
-                    // Build WhatsApp Dispatch Link for this specific order
-                    let itemsSummary = order.items.map(i => `- ${i.name} (${i.qty} ${i.unit}) : Rp ${(i.price * i.qty).toLocaleString('id-ID')}`).join('\n');
-                    const waMessage = encodeURIComponent(
-                        `Halo *${storeState.identity.name}*,\n\n` +
-                        `Saya ingin mengirimkan detail pesanan saya:\n\n` +
-                        `*ID Pesanan:* #${order.id}\n` +
-                        `*Nama:* ${order.name}\n` +
-                        `*Alamat:* ${order.address}\n` +
-                        `${order.notes ? `*Catatan:* ${order.notes}\n\n` : '\n'}` +
-                        `*Daftar Pesanan:*\n${itemsSummary}\n\n` +
-                        `*Total Pembayaran: Rp ${order.total.toLocaleString('id-ID')}*\n\n` +
-                        `Mohon diproses ya kak. Terima kasih!`
-                    );
-                    const waUrl = `https://wa.me/${storeState.identity.whatsapp}?text=${waMessage}`;
-
-                    return `
-                        <div class="bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-700 p-5 space-y-3">
-                            <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3">
-                                <div>
-                                    <span class="font-bold text-slate-900 dark:text-white text-sm">#${order.id}</span>
-                                    <span class="text-xs text-slate-400 block">${order.date}</span>
-                                </div>
-                                <span class="px-3 py-1 rounded-full text-xs font-bold ${statusColor}">${order.status}</span>
+            orders.forEach((ord, index) => {
+                let statusColor = ord.status === 'Selesai' ? 'bg-emerald-100 text-emerald-700' : (ord.status === 'Di Kirim' ? 'bg-blue-100 text-blue-700' : 'bg-amber-100 text-amber-700');
+                
+                const itemDiv = document.createElement('div');
+                itemDiv.className = "bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-3 transition-all-custom";
+                itemDiv.innerHTML = `
+                    <div class="flex items-center justify-between cursor-pointer" onclick="toggleOrderDropdown(${index})">
+                        <div class="space-y-0.5">
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold text-slate-900 text-sm">${ord.code}</span>
+                                <span class="text-[10px] px-2.5 py-0.5 rounded-full font-bold ${statusColor}">${ord.status}</span>
                             </div>
-                            <div class="space-y-1 text-xs text-slate-600 dark:text-slate-300">
-                                <p><strong>Penerima:</strong> ${order.name} (${order.phone})</p>
-                                <p><strong>Alamat:</strong> ${order.address}</p>
-                            </div>
-                            <div class="bg-white dark:bg-slate-900 rounded-xl p-3 border border-slate-200 dark:border-slate-700 space-y-1">
-                                ${order.items.map(i => `<div class="flex justify-between text-xs text-slate-700 dark:text-slate-300"><span>${i.name} (${i.qty} ${i.unit})</span><span class="font-semibold">Rp ${(i.price * i.qty).toLocaleString('id-ID')}</span></div>`).join('')}
-                            </div>
-                            <div class="flex items-center justify-between pt-1">
-                                <span class="text-xs font-bold text-slate-500">Total: <strong class="text-brand-600 dark:text-brand-400 text-sm">Rp ${order.total.toLocaleString('id-ID')}</strong></span>
-                                <a href="${waUrl}" target="_blank" onclick="playSound('click')" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-sm transition-all flex items-center space-x-1.5">
-                                    <span class="material-symbols-outlined text-sm">send</span>
-                                    <span>Kirim ke WhatsApp</span>
-                                </a>
-                            </div>
+                            <p class="text-xs text-slate-500"><i class="fa-regular fa-clock mr-1"></i>${ord.time}</p>
                         </div>
-                    `;
-                }).join('');
-            }
-            document.getElementById('orders-history-modal').classList.remove('hidden');
-        }
-
-        function closeOrdersModal() {
-            playSound('click');
-            document.getElementById('orders-history-modal').classList.add('hidden');
-        }
-
-        /* ========================================================
-           ADMIN CMS & AUTH LOGIC
-           ======================================================== */
-        let isAdminLoggedIn = false;
-
-        function handleAdminNavClick() {
-            playSound('click');
-            if (isAdminLoggedIn) {
-                switchView('admin');
-            } else {
-                document.getElementById('admin-login-modal').classList.remove('hidden');
-            }
-        }
-
-        function closeAdminLoginModal() {
-            playSound('click');
-            document.getElementById('admin-login-modal').classList.add('hidden');
-        }
-
-        function handleAdminLoginSubmit(e) {
-            e.preventDefault();
-            const pass = document.getElementById('admin-password-input').value;
-            if (pass === 'password123') {
-                isAdminLoggedIn = true;
-                closeAdminLoginModal();
-                document.getElementById('admin-password-input').value = '';
-                document.getElementById('admin-login-error').classList.add('hidden');
-                switchView('admin');
-                playSound('success');
-                showToast('Berhasil masuk sebagai Admin CMS!');
-            } else {
-                document.getElementById('admin-login-error').classList.remove('hidden');
-                playSound('click');
-            }
-        }
-
-        function handleAdminLogout() {
-            playSound('click');
-            isAdminLoggedIn = false;
-            switchView('store');
-            showToast('Berhasil keluar dari Admin CMS.');
-        }
-
-        function switchView(view) {
-            playSound('click');
-            const storeView = document.getElementById('view-store');
-            const adminView = document.getElementById('view-admin');
-            const adminBtnText = document.getElementById('admin-btn-text');
-
-            if (view === 'admin') {
-                if (!isAdminLoggedIn) {
-                    document.getElementById('admin-login-modal').classList.remove('hidden');
-                    return;
-                }
-                storeView.classList.add('hidden');
-                adminView.classList.remove('hidden');
-                adminBtnText.innerText = 'Keluar Admin';
-                renderAdminProducts();
-                renderAdminIdentity();
-                renderAdminHero();
-                renderAdminOrders();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            } else {
-                storeView.classList.remove('hidden');
-                adminView.classList.add('hidden');
-                adminBtnText.innerText = 'Admin CMS';
-                renderStorefront();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-        }
-
-        function switchAdminTab(tab) {
-            playSound('click');
-            const tabs = ['products', 'identity', 'hero', 'orders'];
-            tabs.forEach(t => {
-                const btn = document.getElementById(`admin-tab-${t}`);
-                const content = document.getElementById(`admin-content-${t}`);
-                if (t === tab) {
-                    btn.className = "px-6 py-3 font-bold text-sm border-b-2 border-brand-600 text-brand-600 dark:text-brand-400 transition-all flex items-center space-x-2 whitespace-nowrap";
-                    content.classList.remove('hidden');
-                } else {
-                    btn.className = "px-6 py-3 font-semibold text-sm border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-all flex items-center space-x-2 whitespace-nowrap";
-                    content.classList.add('hidden');
-                }
+                        <div class="flex items-center gap-3">
+                            <span class="font-bold text-emerald-600 text-sm">Rp ${ord.total.toLocaleString('id-ID')}</span>
+                            <i id="order-chevron-${index}" class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform"></i>
+                        </div>
+                    </div>
+                    <!-- Hidden Details Dropdown -->
+                    <div id="order-details-${index}" class="hidden pt-3 border-t border-slate-200 text-xs space-y-2 text-slate-600">
+                        <p><strong>Nama Pemesan:</strong> ${ord.name} (${ord.phone})</p>
+                        <p><strong>Alamat:</strong> ${ord.address}</p>
+                        <div class="bg-white p-3 rounded-xl border border-slate-100 space-y-1">
+                            <p class="font-bold text-slate-700 mb-1">Daftar Produk:</p>
+                            ${ord.items.map(i => `<div class="flex justify-between"><span>${i.name} (x${i.qty})</span><span>Rp ${(i.price * i.qty).toLocaleString('id-ID')}</span></div>`).join('')}
+                        </div>
+                    </div>
+                `;
+                listContainer.appendChild(itemDiv);
             });
         }
 
-        // Products CRUD
-        function renderAdminProducts() {
-            const tbody = document.getElementById('admin-product-table-body');
-            tbody.innerHTML = storeState.products.map(p => `
-                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors border-b border-slate-100 dark:border-slate-800">
-                    <td class="py-4 px-6 flex items-center space-x-3">
-                        <img src="${p.image}" class="w-12 h-12 rounded-xl object-cover bg-slate-100 dark:bg-slate-800 shrink-0" onerror="this.src='https://placehold.co/100x100/10b981/ffffff?text=Fruit'">
-                        <div>
-                            <span class="font-bold text-slate-900 dark:text-white block">${p.name}</span>
-                            <span class="text-xs text-slate-400 line-clamp-1">${p.desc}</span>
-                        </div>
-                    </td>
-                    <td class="py-4 px-6"><span class="px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-semibold">${p.category}</span></td>
-                    <td class="py-4 px-6 font-bold text-brand-600 dark:text-brand-400">Rp ${p.price.toLocaleString('id-ID')}</td>
-                    <td class="py-4 px-6 font-semibold text-slate-800 dark:text-slate-200">${p.stock} ${p.unit}</td>
-                    <td class="py-4 px-6">
-                        <div class="flex items-center space-x-2">
-                            <button onclick="openProductModalAdmin('${p.id}')" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 hover:text-brand-600 text-slate-600 dark:text-slate-300 transition-all" title="Edit">
-                                <span class="material-symbols-outlined text-sm">edit</span>
-                            </button>
-                            <button onclick="deleteProductAdmin('${p.id}')" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-rose-50 hover:text-rose-600 text-slate-600 dark:text-slate-300 transition-all" title="Hapus">
-                                <span class="material-symbols-outlined text-sm">delete</span>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
+        function toggleOrderDropdown(index) {
+            const details = document.getElementById(`order-details-${index}`);
+            const chevron = document.getElementById(`order-chevron-${index}`);
+            if (details.classList.contains('hidden')) {
+                details.classList.remove('hidden');
+                chevron.classList.add('rotate-180');
+            } else {
+                details.classList.add('hidden');
+                chevron.classList.remove('rotate-180');
+            }
         }
 
-        function openProductModalAdmin(productId = null) {
-            playSound('click');
-            const modal = document.getElementById('product-crud-modal');
-            const title = document.getElementById('product-crud-modal-title');
-            
-            if (productId) {
-                title.innerText = 'Edit Produk Buah';
-                const p = storeState.products.find(item => item.id === productId);
-                document.getElementById('crud-product-id').value = p.id;
-                document.getElementById('crud-product-name').value = p.name;
-                document.getElementById('crud-product-category').value = p.category;
-                document.getElementById('crud-product-price').value = p.price;
-                document.getElementById('crud-product-stock').value = p.stock;
-                document.getElementById('crud-product-unit').value = p.unit;
-                document.getElementById('crud-product-image').value = p.image;
-                document.getElementById('crud-product-desc').value = p.desc;
+        /* Admin CMS Panel Logic */
+        function toggleAdminPanel() {
+            const panel = document.getElementById('admin-panel');
+            if (panel.classList.contains('hidden')) {
+                panel.classList.remove('hidden');
+                loadAdminData();
             } else {
-                title.innerText = 'Tambah Buah Baru';
-                document.getElementById('crud-product-id').value = '';
-                document.getElementById('crud-product-name').value = '';
-                document.getElementById('crud-product-category').value = 'Lokal Pilihan';
-                document.getElementById('crud-product-price').value = '';
-                document.getElementById('crud-product-stock').value = '';
-                document.getElementById('crud-product-unit').value = 'kg';
-                document.getElementById('crud-product-image').value = '';
-                document.getElementById('crud-product-desc').value = '';
+                panel.classList.add('hidden');
+            }
+        }
+
+        function switchAdminTab(tabName) {
+            document.querySelectorAll('.admin-tab-content').forEach(tab => tab.classList.add('hidden'));
+            document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+                btn.className = "admin-tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white hover:bg-slate-200 text-slate-700 transition-all-custom flex items-center gap-2";
+            });
+
+            document.getElementById(`admin-tab-${tabName}`).classList.remove('hidden');
+            event.currentTarget.className = "admin-tab-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-emerald-600 text-white shadow-sm transition-all-custom flex items-center gap-2";
+        }
+
+        function loadAdminData() {
+            // Fill identity form
+            document.getElementById('admin-brand-name').value = settings.brandName;
+            document.getElementById('admin-brand-tagline').value = settings.brandTagline;
+            document.getElementById('admin-whatsapp-number').value = settings.whatsappNumber;
+            document.getElementById('admin-logo-icon').value = settings.logoIcon;
+            document.getElementById('admin-announcement-toggle').checked = settings.announcementActive;
+            document.getElementById('admin-announcement-input').value = settings.announcementText;
+            document.getElementById('admin-hero-title').value = settings.heroTitle;
+            document.getElementById('admin-hero-subtitle').value = settings.heroSubtitle;
+            document.getElementById('admin-hero-bg').value = settings.heroBg;
+
+            // Fill Dashboard Stats
+            document.getElementById('stat-total-orders').innerText = orders.length;
+            const totalRev = orders.reduce((sum, o) => sum + o.total, 0);
+            document.getElementById('stat-total-revenue').innerText = `Rp ${totalRev.toLocaleString('id-ID')}`;
+            document.getElementById('stat-total-products').innerText = products.length;
+
+            const cMenunggu = orders.filter(o => o.status === 'Menunggu').length;
+            const cDikirim = orders.filter(o => o.status === 'Di Kirim').length;
+            const cSelesai = orders.filter(o => o.status === 'Selesai').length;
+
+            document.getElementById('count-status-menunggu').innerText = cMenunggu;
+            document.getElementById('count-status-dikirim').innerText = cDikirim;
+            document.getElementById('count-status-selesai').innerText = cSelesai;
+
+            // Fill Products Table
+            const prodTable = document.getElementById('admin-product-table-body');
+            prodTable.innerHTML = '';
+            products.forEach(p => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50";
+                tr.innerHTML = `
+                    <td class="p-4 flex items-center gap-3">
+                        <img src="${p.image}" class="w-12 h-12 rounded-xl object-cover border" onerror="this.src='https://placehold.co/100x100'">
+                        <span class="font-bold text-slate-900">${p.name}</span>
+                    </td>
+                    <td class="p-4 text-slate-600">${p.category}</td>
+                    <td class="p-4 text-emerald-600 font-bold">Rp ${p.price.toLocaleString('id-ID')}</td>
+                    <td class="p-4"><span class="px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-lg text-xs font-bold">Tersedia</span></td>
+                    <td class="p-4 text-center space-x-2">
+                        <button onclick="editProduct(${p.id})" class="p-2 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-100 transition-all-custom" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteProduct(${p.id})" class="p-2 bg-rose-50 text-rose-600 rounded-xl hover:bg-rose-100 transition-all-custom" title="Hapus"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                prodTable.appendChild(tr);
+            });
+
+            // Fill Orders Table
+            const ordTable = document.getElementById('admin-orders-table-body');
+            ordTable.innerHTML = '';
+            document.getElementById('admin-order-count').innerText = orders.length;
+
+            if (orders.length === 0) {
+                ordTable.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400">Belum ada pesanan masuk.</td></tr>`;
+                return;
+            }
+
+            orders.forEach((ord, index) => {
+                let statusBadge = ord.status === 'Selesai' ? 'bg-emerald-100 text-emerald-700' : (ord.status === 'Di Kirim' ? 'bg-blue-100 text-blue-700' : 'bg-amber-100 text-amber-700');
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50";
+                tr.innerHTML = `
+                    <td class="p-4">
+                        <span class="font-bold text-slate-900 block">${ord.code}</span>
+                        <span class="text-xs text-slate-400">${ord.time}</span>
+                    </td>
+                    <td class="p-4">
+                        <span class="font-semibold text-slate-800 block">${ord.name}</span>
+                        <span class="text-xs text-slate-500">${ord.phone}</span>
+                    </td>
+                    <td class="p-4">
+                        <span class="font-bold text-emerald-600">Rp ${ord.total.toLocaleString('id-ID')}</span>
+                        <span class="text-xs text-slate-500 block">${ord.items.length} jenis item</span>
+                    </td>
+                    <td class="p-4">
+                        <span class="px-3 py-1 rounded-full text-xs font-bold ${statusBadge}">${ord.status}</span>
+                    </td>
+                    <td class="p-4 text-center">
+                        <select onchange="updateOrderStatus(${index}, this.value)" class="px-3 py-1.5 bg-slate-100 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-emerald-500">
+                            <option value="Menunggu" ${ord.status === 'Menunggu' ? 'selected' : ''}>Menunggu</option>
+                            <option value="Di Kirim" ${ord.status === 'Di Kirim' ? 'selected' : ''}>Di Kirim</option>
+                            <option value="Selesai" ${ord.status === 'Selesai' ? 'selected' : ''}>Selesai</option>
+                        </select>
+                    </td>
+                `;
+                ordTable.appendChild(tr);
+            });
+        }
+
+        function saveIdentitySettings() {
+            settings.brandName = document.getElementById('admin-brand-name').value;
+            settings.brandTagline = document.getElementById('admin-brand-tagline').value;
+            settings.whatsappNumber = document.getElementById('admin-whatsapp-number').value;
+            settings.logoIcon = document.getElementById('admin-logo-icon').value;
+            settings.announcementActive = document.getElementById('admin-announcement-toggle').checked;
+            settings.announcementText = document.getElementById('admin-announcement-input').value;
+            settings.heroTitle = document.getElementById('admin-hero-title').value;
+            settings.heroSubtitle = document.getElementById('admin-hero-subtitle').value;
+            settings.heroBg = document.getElementById('admin-hero-bg').value;
+
+            saveSettingsToStorage();
+            applySettingsToDOM();
+            renderProducts();
+            showNotification('Berhasil', 'Identitas toko dan banner berhasil diperbarui!');
+        }
+
+        /* Customize Title / Label with pencil prompt */
+        function promptRenameLabel(element, defaultText) {
+            let newName = prompt('Ubah nama label / judul:', element.innerText || defaultText);
+            if (newName !== null && newName.trim() !== '') {
+                element.innerText = newName.trim();
+                showNotification('Label Diperbarui', 'Judul berhasil diubah.');
+            }
+        }
+
+        /* Product Management Form */
+        function openProductFormModal(productId = null) {
+            const modal = document.getElementById('product-form-modal');
+            const title = document.getElementById('product-modal-title');
+            document.getElementById('product-form').reset();
+            document.getElementById('form-product-id').value = '';
+
+            if (productId) {
+                title.innerText = "Edit Produk";
+                const p = products.find(item => item.id === productId);
+                if (p) {
+                    document.getElementById('form-product-id').value = p.id;
+                    document.getElementById('form-product-name').value = p.name;
+                    document.getElementById('form-product-category').value = p.category;
+                    document.getElementById('form-product-price').value = p.price;
+                    document.getElementById('form-product-image').value = p.image;
+                    document.getElementById('form-product-desc').value = p.desc;
+                }
+            } else {
+                title.innerText = "Tambah Produk Baru";
             }
             modal.classList.remove('hidden');
         }
 
-        function closeProductModalAdmin() {
-            playSound('click');
-            document.getElementById('product-crud-modal').classList.add('hidden');
+        function closeProductFormModal() {
+            document.getElementById('product-form-modal').classList.add('hidden');
         }
 
-        function saveProductAdmin(e) {
+        function saveProduct(e) {
             e.preventDefault();
-            const id = document.getElementById('crud-product-id').value;
-            const name = document.getElementById('crud-product-name').value;
-            const category = document.getElementById('crud-product-category').value;
-            const price = Number(document.getElementById('crud-product-price').value);
-            const stock = Number(document.getElementById('crud-product-stock').value);
-            const unit = document.getElementById('crud-product-unit').value;
-            const image = document.getElementById('crud-product-image').value;
-            const desc = document.getElementById('crud-product-desc').value;
+            const id = document.getElementById('form-product-id').value;
+            const name = document.getElementById('form-product-name').value;
+            const category = document.getElementById('form-product-category').value;
+            const price = Number(document.getElementById('form-product-price').value);
+            const image = document.getElementById('form-product-image').value;
+            const desc = document.getElementById('form-product-desc').value;
 
             if (id) {
-                const idx = storeState.products.findIndex(p => p.id === id);
-                if (idx !== -1) {
-                    storeState.products[idx] = { id, name, category, price, stock, unit, image, desc };
+                // Edit
+                const p = products.find(item => item.id == id);
+                if (p) {
+                    p.name = name;
+                    p.category = category;
+                    p.price = price;
+                    p.image = image;
+                    p.desc = desc;
                 }
-                showToast('Produk berhasil diperbarui!');
             } else {
-                const newId = 'p_' + Date.now();
-                storeState.products.push({ id: newId, name, category, price, stock, unit, image, desc });
-                showToast('Produk baru berhasil ditambahkan!');
+                // Add new
+                const newId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
+                products.push({ id: newId, name, category, price, image, desc });
             }
 
-            saveState();
-            closeProductModalAdmin();
-            renderAdminProducts();
+            saveProductsToStorage();
+            renderProducts();
+            loadAdminData();
+            closeProductFormModal();
+            showNotification('Produk Disimpan', 'Katalog produk berhasil diperbarui.');
         }
 
-        function deleteProductAdmin(productId) {
-            playSound('click');
-            if (confirm('Hapus produk ini dari katalog?')) {
-                storeState.products = storeState.products.filter(p => p.id !== productId);
-                saveState();
-                renderAdminProducts();
-                showToast('Produk berhasil dihapus.');
+        function editProduct(id) {
+            openProductFormModal(id);
+        }
+
+        function deleteProduct(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus produk ini?')) {
+                products = products.filter(p => p.id !== id);
+                saveProductsToStorage();
+                renderProducts();
+                loadAdminData();
+                showNotification('Produk Dihapus', 'Produk berhasil dihapus dari katalog.');
             }
         }
 
-        // Store Identity CMS
-        function renderAdminIdentity() {
-            document.getElementById('cms-store-name').value = storeState.identity.name;
-            document.getElementById('cms-store-tagline').value = storeState.identity.tagline;
-            document.getElementById('cms-store-address').value = storeState.identity.address;
-            document.getElementById('cms-store-whatsapp').value = storeState.identity.whatsapp;
-        }
-
-        function saveStoreIdentity(e) {
-            e.preventDefault();
-            storeState.identity.name = document.getElementById('cms-store-name').value;
-            storeState.identity.tagline = document.getElementById('cms-store-tagline').value;
-            storeState.identity.address = document.getElementById('cms-store-address').value;
-            storeState.identity.whatsapp = document.getElementById('cms-store-whatsapp').value;
-            saveState();
-            playSound('success');
-            showToast('Identitas Toko & Footer berhasil diperbarui!');
-        }
-
-        // Hero Banner Seasonal CMS Presets
-        function renderAdminHero() {
-            document.getElementById('cms-hero-active').checked = storeState.hero.active;
-            document.getElementById('cms-hero-badge').value = storeState.hero.badge;
-            document.getElementById('cms-hero-title').value = storeState.hero.title;
-            document.getElementById('cms-hero-subtitle').value = storeState.hero.subtitle;
-            document.getElementById('cms-hero-garansi').value = storeState.hero.garansi;
-            document.getElementById('cms-hero-theme').value = storeState.hero.theme;
-        }
-
-        function applyPreset(type) {
-            playSound('click');
-            if (type === 'lebaran') {
-                document.getElementById('cms-hero-badge').value = '🌙 Spesial Idul Fitri & Panen Raya';
-                document.getElementById('cms-hero-title').value = 'Hantaran Buah Segar Lebaran Istimewa';
-                document.getElementById('cms-hero-subtitle').value = 'Sajikan buah segar berkualitas tinggi untuk keluarga tercinta di Hari Raya. Dipetik langsung dari kebun terbaik.';
-                document.getElementById('cms-hero-garansi').value = 'Garansi Kesegaran: 100% Ganti Baru Jika Busuk';
-                document.getElementById('cms-hero-theme').value = 'from-emerald-700 via-emerald-600 to-teal-900';
-            } else if (type === 'weekend') {
-                document.getElementById('cms-hero-badge').value = '🎉 Flash Sale Akhir Pekan';
-                document.getElementById('cms-hero-title').value = 'Diskon Spesial Buah Segar Weekend!';
-                document.getElementById('cms-hero-subtitle').value = 'Nikmati akhir pekan sehat bersama buah-buahan segar pilihan dengan harga spesial diskon khusus hari ini.';
-                document.getElementById('cms-hero-garansi').value = 'Garansi Kesegaran: 100% Ganti Baru Jika Busuk';
-                document.getElementById('cms-hero-theme').value = 'from-amber-700 via-orange-600 to-rose-900';
-            } else if (type === 'newyear') {
-                document.getElementById('cms-hero-badge').value = '🎆 Spesial Tahun Baru Sehat';
-                document.getElementById('cms-hero-title').value = 'Resolusi Sehat Bersama Buah Premium';
-                document.getElementById('cms-hero-subtitle').value = 'Awali tahun baru dengan gaya hidup sehat dan konsumsi buah segar berkualitas setiap hari.';
-                document.getElementById('cms-hero-garansi').value = 'Garansi Kesegaran: 100% Ganti Baru Jika Busuk';
-                document.getElementById('cms-hero-theme').value = 'from-indigo-900 via-blue-800 to-slate-900';
-            } else if (type === 'normal') {
-                document.getElementById('cms-hero-badge').value = '🌱 Panen Raya Buah Segar';
-                document.getElementById('cms-hero-title').value = 'Panen Raya Buah Segar Premium';
-                document.getElementById('cms-hero-subtitle').value = 'Dipetik langsung dari kebun pilihan terbaik dengan standar kualitas tinggi, langsung diantar ke depan pintu rumah Anda.';
-                document.getElementById('cms-hero-garansi').value = 'Garansi Kesegaran: 100% Ganti Baru Jika Busuk';
-                document.getElementById('cms-hero-theme').value = 'from-emerald-700 via-emerald-600 to-teal-900';
+        function updateOrderStatus(index, newStatus) {
+            if (orders[index]) {
+                orders[index].status = newStatus;
+                saveOrdersToStorage();
+                loadAdminData();
+                showNotification('Status Pesanan Diperbarui', `Pesanan ${orders[index].code} diubah menjadi ${newStatus}.`);
             }
-            showToast('Preset momen berhasil dimuat!');
         }
 
-        function saveHeroBanner(e) {
-            e.preventDefault();
-            storeState.hero.active = document.getElementById('cms-hero-active').checked;
-            storeState.hero.badge = document.getElementById('cms-hero-badge').value;
-            storeState.hero.title = document.getElementById('cms-hero-title').value;
-            storeState.hero.subtitle = document.getElementById('cms-hero-subtitle').value;
-            storeState.hero.garansi = document.getElementById('cms-hero-garansi').value;
-            storeState.hero.theme = document.getElementById('cms-hero-theme').value;
-            saveState();
-            playSound('success');
-            showToast('Banner Musiman berhasil diperbarui!');
-        }
+        /* CRM Broadcast via WhatsApp */
+        function sendCrmBroadcast() {
+            const phone = document.getElementById('crm-phone-input').value.trim();
+            const message = document.getElementById('crm-message-input').value.trim();
 
-        // Orders Management & Manual WhatsApp Progress Dispatcher
-        function renderAdminOrders() {
-            const tbody = document.getElementById('admin-orders-table-body');
-            if (storeState.orders.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="5" class="py-12 text-center text-slate-400">Belum ada pesanan masuk.</td>
-                    </tr>
-                `;
+            if (!message) {
+                showNotification('Pesan Kosong', 'Mohon tuliskan pesan broadcast promosi terlebih dahulu.');
                 return;
             }
 
-            tbody.innerHTML = storeState.orders.map(order => {
-                let statusColor = 'bg-amber-100 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400';
-                if (order.status === 'Dalam Pengiriman') statusColor = 'bg-blue-100 dark:bg-blue-950/50 text-blue-700 dark:text-blue-400';
-                if (order.status === 'Selesai') statusColor = 'bg-emerald-100 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400';
-
-                return `
-                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors border-b border-slate-100 dark:border-slate-800">
-                        <td class="py-4 px-6">
-                            <span class="font-bold text-slate-900 dark:text-white block">#${order.id}</span>
-                            <span class="text-xs text-slate-400">${order.date}</span>
-                        </td>
-                        <td class="py-4 px-6">
-                            <span class="font-bold text-slate-800 dark:text-slate-200 block">${order.name}</span>
-                            <span class="text-xs text-slate-500 font-mono">${order.phone}</span>
-                            <span class="text-xs text-slate-400 block line-clamp-1 max-w-xs">${order.address}</span>
-                        </td>
-                        <td class="py-4 px-6">
-                            <div class="space-y-0.5 text-xs text-slate-600 dark:text-slate-300 max-w-xs">
-                                ${order.items.map(i => `<div>• ${i.name} (${i.qty} ${i.unit})</div>`).join('')}
-                                <div class="font-bold text-brand-600 dark:text-brand-400 pt-1">Total: Rp ${order.total.toLocaleString('id-ID')}</div>
-                            </div>
-                        </td>
-                        <td class="py-4 px-6">
-                            <select onchange="updateOrderStatus('${order.id}', this.value)" class="px-3 py-1.5 rounded-xl text-xs font-bold ${statusColor} border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 focus:outline-none">
-                                <option value="Diproses" ${order.status === 'Diproses' ? 'selected' : ''}>Diproses</option>
-                                <option value="Dalam Pengiriman" ${order.status === 'Dalam Pengiriman' ? 'selected' : ''}>Dalam Pengiriman</option>
-                                <option value="Selesai" ${order.status === 'Selesai' ? 'selected' : ''}>Selesai</option>
-                            </select>
-                        </td>
-                        <td class="py-4 px-6">
-                            <button onclick="dispatchAdminWhatsAppProgress('${order.id}')" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-sm transition-all flex items-center space-x-1.5 whitespace-nowrap">
-                                <span class="material-symbols-outlined text-sm">send</span>
-                                <span>Kirim Info Progress</span>
-                            </button>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-        }
-
-        function updateOrderStatus(orderId, newStatus) {
-            playSound('click');
-            const order = storeState.orders.find(o => o.id === orderId);
-            if (order) {
-                order.status = newStatus;
-                saveState();
-                renderAdminOrders();
-                showToast(`Status pesanan #${orderId} diubah menjadi ${newStatus}`);
-            }
-        }
-
-        function dispatchAdminWhatsAppProgress(orderId) {
-            playSound('click');
-            const order = storeState.orders.find(o => o.id === orderId);
-            if (!order) return;
-
-            let custPhone = order.phone.replace(/\D/g, '');
-            if (custPhone.startsWith('0')) {
-                custPhone = '62' + custPhone.slice(1);
-            }
-
-            const message = encodeURIComponent(
-                `Halo Kak *${order.name}*,\n\n` +
-                `Berikut adalah pembaruan status pesanan Anda di *${storeState.identity.name}*:\n\n` +
-                `*ID Pesanan:* #${order.id}\n` +
-                `*Status Terbaru:* *${order.status}*\n\n` +
-                `${order.status === 'Dalam Pengiriman' ? 'Kurir kami sedang mengantar pesanan buah segar Anda ke alamat tujuan. Mohon bersiap ya kak!\n\n' : ''}` +
-                `${order.status === 'Selesai' ? 'Pesanan telah selesai diantar. Terima kasih telah berbelanja buah segar bersama kami!\n\n' : ''}` +
-                `Jika ada kendala, silakan hubungi kami kembali. Terima kasih!`
-            );
-
-            const waUrl = `https://wa.me/${custPhone}?text=${message}`;
+            const encoded = encodeURIComponent(message);
+            let waUrl = phone ? `https://wa.me/${phone}?text=${encoded}` : `https://wa.me/?text=${encoded}`;
             window.open(waUrl, '_blank');
-            showToast('WhatsApp progress berhasil disiapkan.');
+            showNotification('Broadcast CRM Dikirim', 'Pesan promosi berhasil diteruskan ke WhatsApp.');
         }
 
-        window.onload = function() {
-            applyDarkMode();
-            renderStorefront();
-            updateCartBadge();
-        };
+        /* Centered Notification Popup Modal */
+        function showNotification(title, message) {
+            document.getElementById('notif-title').innerText = title;
+            document.getElementById('notif-message').innerText = message;
+            document.getElementById('notification-modal').classList.remove('hidden');
+        }
+
+        function closeNotificationModal() {
+            document.getElementById('notification-modal').classList.add('hidden');
+        }
     </script>
 </body>
 </html>
